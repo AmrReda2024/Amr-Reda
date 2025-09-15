@@ -1,0 +1,17 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "YOUR_APP_PACKAGE_NAME_HERE",
+      "sha256_cert_fingerprints": ["YOUR_APP_SHA256_CERT_FINGERPRINT_HERE"]
+    }
+  }
+]
+// IMPORTANT: 
+// 1. Replace YOUR_APP_PACKAGE_NAME_HERE with your Android app's package name (e.g., com.example.lexmena).
+// 2. Replace YOUR_APP_SHA256_CERT_FINGERPRINT_HERE with the SHA256 fingerprint of your app's signing certificate.
+// You can generate this file and fingerprints using Google's official Digital Asset Links tools.
+// For example: https://developers.google.com/digital-asset-links/tools/generator
+// This file needs to be accessible at YOUR_DOMAIN/.well-known/assetlinks.json
+// Ensure your web server serves this file with 'Content-Type: application/json'.

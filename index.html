@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LexMENA</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icons/amr-photo-icon-192x192.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icons/amr-photo-icon-192x192.png">
+    <meta name="theme-color" content="#000000" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'header-bg': '#000000',      // Black for header
+              'body-bg': '#f8fafc',        // Slate 50 (very light gray) for main background
+              'card-bg': '#ffffff',        // White for cards, AI messages, inputs
+              'primary-accent': '#1e3a8a', // Deep blue for user messages, actions, AI icon
+              'text-primary': '#1f2937',  // Slate 800 (dark gray) for primary text
+              'text-secondary': '#4b5563', // Slate 600 (medium gray) for secondary text
+              'border-color': '#cbd5e1',  // Slate 300 (light gray) for borders
+              'disclaimer-bg': '#e2e8f0',   // Slate 200 for disclaimer background
+              'disclaimer-border': '#94a3b8', // Slate 400 for disclaimer border
+              'disclaimer-text': '#334155', // Slate 700 for disclaimer text
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.0.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-body-bg">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(error => {
+              console.log('ServiceWorker registration failed: ', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
