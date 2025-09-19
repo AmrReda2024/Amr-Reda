@@ -65,8 +65,15 @@ const SourcesList: React.FC<{ sources: Source[] }> = ({ sources }) => {
   );
 };
 
+const isArabic = (text: string): boolean => {
+  if (!text) return false;
+  const arabicRegex = /[\u0600-\u06FF]/;
+  return arabicRegex.test(text);
+};
+
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.sender === 'user';
+  const messageIsArabic = isArabic(message.text);
 
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -81,7 +88,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             isUser ? 'bg-primary-accent text-white' : 'bg-card-bg text-text-primary border border-border-color'
           }`}
         >
-          <p className="whitespace-pre-wrap">{message.text}</p>
+          <p 
+            className={`whitespace-pre-wrap ${messageIsArabic ? 'text-right' : 'text-left'}`}
+            dir={messageIsArabic ? 'rtl' : 'ltr'}
+          >
+            {message.text}
+          </p>
           {!isUser && message.sources && <SourcesList sources={message.sources} />}
         </div>
       </div>

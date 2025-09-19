@@ -65,7 +65,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
         <textarea
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Ask a legal question or describe your task..."
+          placeholder="Ask a legal question or describe your task... / اطرح سؤالاً قانونياً أو صف مهمتك..."
           rows={2}
           className="flex-grow p-3 border border-border-color text-text-primary bg-card-bg focus:ring-2 focus:ring-primary-accent focus:border-transparent outline-none resize-none disabled:bg-slate-50"
           disabled={isLoading}

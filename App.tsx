@@ -26,7 +26,7 @@ const App: React.FC = () => {
     setMessages([
       {
         id: Date.now().toString(),
-        text: "📍 Which jurisdiction (country or legal system) would you like me to search or answer under?",
+        text: "📍 Which jurisdiction (country or legal system) would you like me to search or answer under? / 📍 في أي ولاية قضائية (دولة أو نظام قانوني) تود أن أبحث أو أجيب؟",
         sender: 'ai',
         sources: []
       }
