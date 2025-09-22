@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lexmena-cache-v3'; // Incremented version
+const CACHE_NAME = 'lexmena-cache-v4'; // Incremented version
 const baseUrlsToCache = [
   '/',
   '/index.html',

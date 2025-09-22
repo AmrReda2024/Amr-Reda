@@ -44,53 +44,56 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
 
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-card-bg border-t border-border-color sticky bottom-0 shadow-top">
-      <div className="flex items-center max-w-7xl mx-auto">
-        <button
-          type="button"
-          onClick={handleFileButtonClick}
-          className="p-3 border border-r-0 border-border-color rounded-l-md hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-accent focus:border-transparent disabled:bg-slate-100 flex items-center justify-center h-[62px] w-[50px]"
-          disabled={isLoading}
-          aria-label="Attach file"
-        >
-          <PaperclipIcon className="h-6 w-6 text-text-secondary" />
-        </button>
-        <input 
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileInputChange}
-          className="hidden"
-          multiple
-        />
-        <textarea
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Ask a legal question or describe your task... / اطرح سؤالاً قانونياً أو صف مهمتك..."
-          rows={2}
-          className="flex-grow p-3 border border-border-color text-text-primary bg-card-bg focus:ring-2 focus:ring-primary-accent focus:border-transparent outline-none resize-none disabled:bg-slate-50"
-          disabled={isLoading}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit(e);
-            }
-          }}
-          aria-label="Chat message input"
-        />
-        <button
-          type="submit"
-          className="bg-primary-accent text-white p-3 rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-1 disabled:bg-blue-300 flex items-center justify-center h-[62px] w-[62px]"
-          disabled={isLoading || !inputValue.trim()}
-          aria-label="Send message"
-        >
-          {isLoading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" role="status" aria-label="Loading"></div>
-          ) : (
-            <SendIcon className="h-6 w-6" />
-          )}
-        </button>
-      </div>
-    </form>
+    <div className="bg-card-bg border-t border-border-color sticky bottom-0">
+      <form onSubmit={handleSubmit} className="p-4 container mx-auto max-w-4xl">
+        <div className="flex items-end bg-card-bg border border-border-color rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-primary-accent">
+          <button
+            type="button"
+            onClick={handleFileButtonClick}
+            className="p-3 text-text-secondary hover:text-primary-accent focus:outline-none disabled:text-slate-300"
+            disabled={isLoading}
+            aria-label="Attach file"
+          >
+            <PaperclipIcon className="h-6 w-6" />
+          </button>
+          <input 
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileInputChange}
+            className="hidden"
+            multiple
+          />
+          <textarea
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Ask a legal question or describe your task... / اطرح سؤالاً قانونياً أو صف مهمتك..."
+            rows={1}
+            className="flex-grow p-3 border-none text-text-primary bg-transparent outline-none resize-none disabled:bg-slate-50 max-h-40"
+            style={{paddingTop: '12px', paddingBottom: '12px'}}
+            disabled={isLoading}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+            aria-label="Chat message input"
+          />
+          <button
+            type="submit"
+            className="p-3 text-white bg-primary-accent rounded-lg m-1 hover:bg-primary-accent-hover focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-2 disabled:bg-blue-300"
+            disabled={isLoading || !inputValue.trim()}
+            aria-label="Send message"
+          >
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" role="status" aria-label="Loading"></div>
+            ) : (
+              <SendIcon className="h-6 w-6" />
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

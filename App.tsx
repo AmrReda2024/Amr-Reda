@@ -2,7 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
-import Footer from './components/Footer'; // Import Footer
+import Footer from './components/Footer';
+import Disclaimer from './components/Disclaimer';
+import ConversationStarters from './components/ConversationStarters';
 import { Message } from './types';
 import { fetchGeminiResponse } from './services/geminiService';
 
@@ -12,7 +14,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]); // For future use
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,25 +24,10 @@ const App: React.FC = () => {
     scrollToBottom();
   }, [messages]);
   
-  useEffect(() => {
-    setMessages([
-      {
-        id: Date.now().toString(),
-        text: "📍 Which jurisdiction (country or legal system) would you like me to search or answer under? / 📍 في أي ولاية قضائية (دولة أو نظام قانوني) تود أن أبحث أو أجيب؟",
-        sender: 'ai',
-        sources: []
-      }
-    ]);
-  }, []);
-
   const handleFileChange = useCallback((files: FileList | null) => {
     if (files) {
       setUploadedFiles(Array.from(files));
-      // For now, we'll just update the state. 
       // Future implementation would involve processing these files.
-      // console.log("Files selected:", Array.from(files).map(f => f.name)); 
-      // Optionally, send a message to the chat indicating files were "received"
-      // This part is UI only for this iteration. The system prompt primes the AI.
     }
   }, []);
 
@@ -54,25 +41,34 @@ const App: React.FC = () => {
     setIsLoading(true);
     setError(null);
 
+    const loadingMessageId = (Date.now() + 1).toString();
+    const loadingAiMessage: Message = {
+      id: loadingMessageId,
+      text: '...', // Special key for loading indicator
+      sender: 'ai',
+      sources: []
+    };
+    setMessages(prevMessages => [...prevMessages, loadingAiMessage]);
+
     try {
       const { text: aiText, sources } = await fetchGeminiResponse(text);
       const newAiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: loadingMessageId, // Use same ID to replace
         text: aiText,
         sender: 'ai',
         sources: sources,
       };
-      setMessages(prevMessages => [...prevMessages, newAiMessage]);
+      setMessages(prevMessages => prevMessages.map(msg => msg.id === loadingMessageId ? newAiMessage : msg));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
       setError(errorMessage); 
       const errorAiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: `Sorry, I encountered an error processing your request. ${errorMessage}. Please ensure your API_KEY is correctly configured if this issue persists, or try rephrasing your query.`,
+        id: loadingMessageId, // Use same ID to replace
+        text: `Sorry, I encountered an error. ${errorMessage}. Please check your configuration or try again.`,
         sender: 'ai',
         sources: []
       };
-      setMessages(prevMessages => [...prevMessages, errorAiMessage]);
+      setMessages(prevMessages => prevMessages.map(msg => msg.id === loadingMessageId ? errorAiMessage : msg));
     } finally {
       setIsLoading(false);
     }
@@ -81,19 +77,18 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-body-bg text-text-primary">
       <Header />
-      <main className="flex-grow overflow-y-auto p-4 space-y-4 container mx-auto max-w-7xl pb-24" aria-live="polite"> {/* Added pb-24 to avoid overlap with ChatInput+Footer */}
-        {messages.map(msg => (
-          <ChatMessage key={msg.id} message={msg} />
-        ))}
-        <div ref={messagesEndRef} />
-         {error && !isLoading && (
-           <div className="text-red-700 bg-red-100 border border-red-300 p-3 rounded-md text-sm text-center my-2 shadow max-w-7xl mx-auto" role="alert"> {/* Ensured error message also respects new max-width */}
-             <strong>Error:</strong> {error}
-           </div>
-         )}
+      <main className="flex-grow overflow-y-auto p-4" aria-live="polite">
+        <div className="container mx-auto max-w-4xl space-y-6">
+          <Disclaimer />
+          {messages.length === 0 && <ConversationStarters onSendMessage={handleSendMessage} />}
+          {messages.map(msg => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
       </main>
       <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} onFileChange={handleFileChange} />
-      <Footer /> {/* Render Footer */}
+      <Footer />
     </div>
   );
 };
