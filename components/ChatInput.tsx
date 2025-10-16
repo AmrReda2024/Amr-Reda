@@ -1,4 +1,43 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+
+// Fix: Add types for the Web Speech API to resolve TypeScript errors.
+// These types are not included in default TypeScript DOM typings.
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternative;
+}
+interface SpeechRecognitionAlternative {
+  transcript: string;
+}
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+    error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onend: () => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: { new(): SpeechRecognition };
+    webkitSpeechRecognition: { new(): SpeechRecognition };
+  }
+}
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -18,16 +57,86 @@ const PaperclipIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+const MicrophoneIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+    <path d="M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z" />
+    <path d="M6 10.5a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.75 6.75 0 1 1-13.5 0v-1.5A.75.75 0 0 1 6 10.5Z" />
+  </svg>
+);
+
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileChange }) => {
   const [inputValue, setInputValue] = useState('');
+  const [isListening, setIsListening] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const textBeforeListening = useRef<string>('');
+  
+  // Feature detection for Speech Recognition API
+  const isSpeechRecognitionSupported = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+
+  useEffect(() => {
+    if (!isSpeechRecognitionSupported) {
+      return;
+    }
+    
+    // Handle vendor prefixes for SpeechRecognition
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognitionAPI();
+    
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = navigator.language || 'en-US'; // Use browser's language
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = Array.from(event.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+      
+      const prefix = textBeforeListening.current ? textBeforeListening.current + ' ' : '';
+      setInputValue(prefix + transcript);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+    
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    // Cleanup on unmount
+    return () => {
+      recognition.stop();
+    };
+  }, [isSpeechRecognitionSupported]);
+
+  const handleMicClick = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      textBeforeListening.current = inputValue;
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() && !isLoading) {
       onSendMessage(inputValue.trim());
       setInputValue('');
+      textBeforeListening.current = '';
+      if (isListening) {
+          recognitionRef.current?.stop();
+      }
     }
   };
 
@@ -63,6 +172,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
             className="hidden"
             multiple
           />
+          {isSpeechRecognitionSupported && (
+            <button
+              type="button"
+              onClick={handleMicClick}
+              className={`p-3 focus:outline-none disabled:text-slate-300 ${
+                isListening ? 'text-red-500 animate-pulse' : 'text-text-secondary hover:text-primary-accent'
+              }`}
+              disabled={isLoading}
+              aria-label={isListening ? "Stop voice input" : "Start voice input"}
+            >
+              <MicrophoneIcon className="h-6 w-6" />
+            </button>
+          )}
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}

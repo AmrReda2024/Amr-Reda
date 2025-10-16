@@ -3,8 +3,8 @@ import Header from './components/Header';
 import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
 import Footer from './components/Footer';
-import Disclaimer from './components/Disclaimer';
 import ConversationStarters from './components/ConversationStarters';
+import ShareButton from './components/ShareButton';
 import { Message } from './types';
 import { fetchGeminiResponse } from './services/geminiService';
 
@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -74,13 +75,44 @@ const App: React.FC = () => {
     }
   }, []); 
 
+  const handleShareConversation = useCallback(() => {
+    // Filter out the loading message before copying
+    const validMessages = messages.filter(msg => msg.text !== '...');
+
+    if (validMessages.length === 0) return;
+
+    const formattedConversation = validMessages
+      .map(msg => {
+        let content = `${msg.sender === 'user' ? 'User' : 'LexMENA'}:\n${msg.text}`;
+        if (msg.sender === 'ai' && msg.sources && msg.sources.length > 0) {
+          const sourcesText = msg.sources
+            .map(source => `- ${source.title} (${source.uri})`)
+            .join('\n');
+          content += `\n\nSources:\n${sourcesText}`;
+        }
+        return content;
+      })
+      .join('\n\n---\n\n');
+
+    const fullText = `LexMENA Conversation\n\n${formattedConversation}`;
+    
+    navigator.clipboard.writeText(fullText).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+    }).catch(err => {
+      console.error('Failed to copy conversation: ', err);
+      setError("Failed to copy conversation to clipboard.");
+    });
+  }, [messages]);
+
   return (
     <div className="flex flex-col h-screen bg-body-bg text-text-primary">
       <Header />
       <main className="flex-grow overflow-y-auto p-4" aria-live="polite">
         <div className="container mx-auto max-w-4xl space-y-6">
-          <Disclaimer />
+          <h1 className="text-center text-2xl font-bold text-primary-accent opacity-90">LexMENA</h1>
           {messages.length === 0 && <ConversationStarters onSendMessage={handleSendMessage} />}
+          {messages.length > 0 && <ShareButton onShare={handleShareConversation} isCopied={isCopied} />}
           {messages.map(msg => (
             <ChatMessage key={msg.id} message={msg} />
           ))}
