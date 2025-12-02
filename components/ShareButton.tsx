@@ -24,7 +24,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ onShare, isCopied }) => {
       <button
         onClick={onShare}
         disabled={isCopied}
-        className="flex items-center px-4 py-2 bg-card-bg border border-border-color rounded-lg shadow-sm text-sm font-medium text-text-primary hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent transition-all duration-200 disabled:bg-slate-50 disabled:cursor-wait"
+        className="flex items-center px-4 py-2 glass-panel border border-border-color rounded-lg shadow-sm text-sm font-medium text-text-primary hover:border-primary-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-accent focus:ring-offset-slate-900 transition-all duration-200 disabled:opacity-70 disabled:cursor-wait"
         aria-live="polite"
       >
         {isCopied ? (

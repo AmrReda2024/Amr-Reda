@@ -108,8 +108,8 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-body-bg text-text-primary">
       <Header />
-      <main className="flex-grow overflow-y-auto p-4" aria-live="polite">
-        <div className="container mx-auto max-w-4xl space-y-6">
+      <main className="flex-grow overflow-y-auto p-4 pb-32" aria-live="polite">
+        <div className="container mx-auto max-w-4xl space-y-6 glass-panel p-6 rounded-2xl border border-border-color shadow-lg fade-in">
           <h1 className="text-center text-2xl font-bold text-primary-accent opacity-90">LexMENA</h1>
           {messages.length === 0 && <ConversationStarters onSendMessage={handleSendMessage} />}
           {messages.length > 0 && <ShareButton onShare={handleShareConversation} isCopied={isCopied} />}

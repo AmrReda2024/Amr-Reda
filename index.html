@@ -7,30 +7,34 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icons/amr-photo-icon-192x192.png" type="image/png">
     <link rel="apple-touch-icon" href="/icons/amr-photo-icon-192x192.png">
-    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="theme-color" content="#0f172a" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    >
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Cairo', 'sans-serif'],
+              sans: ['Inter', 'Cairo', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace']
             },
             colors: {
-              'header-bg': '#ffffff',
-              'body-bg': '#FFF8F8',         // Very light, warm off-white
-              'card-bg': '#ffffff',
-              'primary-accent': '#800000',  // Maroon
-              'primary-accent-hover': '#660000', // Darker Maroon for hover
-              'text-primary': '#111827',
-              'text-secondary': '#4b5563',
-              'border-color': '#E6DCDC',   // Soft, desaturated reddish gray border
-              'disclaimer-bg': '#F9EBEB',    // Light reddish/pink for disclaimer
-              'disclaimer-border': '#C0392B',  // Strong red for disclaimer border
-              'disclaimer-text': '#78281F',    // Deep red for disclaimer text
+              'header-bg': '#0b1224',
+              'body-bg': '#0f172a',
+              'card-bg': 'rgba(30, 41, 59, 0.6)',
+              'primary-accent': '#3b82f6',
+              'primary-accent-hover': '#2563eb',
+              'text-primary': '#e2e8f0',
+              'text-secondary': '#cbd5e1',
+              'border-color': 'rgba(255, 255, 255, 0.08)',
+              'disclaimer-bg': 'rgba(30, 41, 59, 0.7)',
+              'disclaimer-border': '#3b82f6',
+              'disclaimer-text': '#e2e8f0',
             }
           }
         }
@@ -48,6 +52,41 @@
 </script>
 </head>
   <body class="bg-body-bg font-sans">
+    <style>
+      body { font-family: 'Inter', 'Cairo', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+      .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: #1e293b; }
+      ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+      /* Glassmorphism panels */
+      .glass-panel {
+          background: rgba(30, 41, 59, 0.7);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .nav-item.active {
+          background: rgba(30, 58, 138, 0.4);
+          border-left: 3px solid #3b82f6;
+          color: #fff;
+      }
+
+      /* Animations */
+      .fade-in { animation: fadeIn 0.3s ease-in-out; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+      .loading-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; }
+      }
+    </style>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>

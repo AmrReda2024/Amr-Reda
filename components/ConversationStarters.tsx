@@ -26,7 +26,7 @@ const ConversationStarters: React.FC<ConversationStartersProps> = ({ onSendMessa
           <button
             key={index}
             onClick={() => onSendMessage(starter.prompt)}
-            className="p-4 bg-card-bg border border-border-color rounded-lg shadow-sm hover:shadow-md hover:border-primary-accent transition-all duration-200 text-left focus:outline-none focus:ring-2 focus:ring-primary-accent"
+            className="p-4 glass-panel border border-border-color rounded-lg shadow-sm hover:shadow-lg hover:border-primary-accent transition-all duration-200 text-left focus:outline-none focus:ring-2 focus:ring-primary-accent"
           >
             <p className="font-bold text-primary-accent text-sm">{starter.use_case}</p>
             <p className="text-text-secondary text-sm mt-1">{starter.prompt}</p>
