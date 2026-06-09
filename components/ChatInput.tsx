@@ -153,13 +153,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
 
 
   return (
-    <div className="bg-card-bg border-t border-border-color sticky bottom-0">
+    <div className="glass-panel bg-card-bg border-t border-border-color sticky bottom-0">
       <form onSubmit={handleSubmit} className="p-4 container mx-auto max-w-4xl">
-        <div className="flex items-end bg-card-bg border border-border-color rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-primary-accent">
+        <div className="flex items-end glass-panel border border-border-color rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-primary-accent">
           <button
             type="button"
             onClick={handleFileButtonClick}
-            className="p-3 text-text-secondary hover:text-primary-accent focus:outline-none disabled:text-slate-300"
+            className="p-3 text-text-secondary hover:text-primary-accent focus:outline-none disabled:text-slate-500"
             disabled={isLoading}
             aria-label="Attach file"
           >
@@ -176,8 +176,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
             <button
               type="button"
               onClick={handleMicClick}
-              className={`p-3 focus:outline-none disabled:text-slate-300 ${
-                isListening ? 'text-red-500 animate-pulse' : 'text-text-secondary hover:text-primary-accent'
+              className={`p-3 focus:outline-none disabled:text-slate-500 ${
+                isListening ? 'text-red-400 animate-pulse' : 'text-text-secondary hover:text-primary-accent'
               }`}
               disabled={isLoading}
               aria-label={isListening ? "Stop voice input" : "Start voice input"}
@@ -190,7 +190,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Ask a legal question or describe your task... / اطرح سؤالاً قانونياً أو صف مهمتك..."
             rows={1}
-            className="flex-grow p-3 border-none text-text-primary bg-transparent outline-none resize-none disabled:bg-slate-50 max-h-40"
+            className="flex-grow p-3 border-none text-text-primary bg-transparent outline-none resize-none disabled:bg-slate-800 max-h-40"
             style={{paddingTop: '12px', paddingBottom: '12px'}}
             disabled={isLoading}
             onKeyDown={(e) => {
@@ -203,7 +203,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, onFileC
           />
           <button
             type="submit"
-            className="p-3 text-white bg-primary-accent rounded-lg m-1 hover:bg-primary-accent-hover focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-2 disabled:bg-blue-300"
+            className="p-3 text-white bg-primary-accent rounded-lg m-1 hover:bg-primary-accent-hover focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-2 focus:ring-offset-slate-900 disabled:bg-blue-300"
             disabled={isLoading || !inputValue.trim()}
             aria-label="Send message"
           >

@@ -95,7 +95,7 @@ const SourcesList: React.FC<{ sources: Source[] }> = ({ sources }) => {
             href={source.uri}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-start p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors group border border-slate-200"
+            className="flex items-start p-2.5 rounded-lg glass-panel transition-colors group border border-border-color hover:border-primary-accent"
           >
             <ExternalLinkIcon className="h-4 w-4 text-primary-accent mr-2 mt-0.5 flex-shrink-0" />
             <span className="text-sm font-medium text-primary-accent group-hover:underline break-words">
@@ -130,10 +130,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     return (
       <div className="flex mb-4 justify-start animate-fadeIn">
         <div className="flex items-start max-w-xl lg:max-w-2xl">
-          <div className="h-8 w-8 bg-slate-200 rounded-full mr-3 flex-shrink-0 flex items-center justify-center">
-            <AiQuillIcon className="h-5 w-5 text-slate-500" />
+          <div className="h-8 w-8 bg-slate-800 rounded-full mr-3 flex-shrink-0 flex items-center justify-center border border-border-color">
+            <AiQuillIcon className="h-5 w-5 text-primary-accent" />
           </div>
-          <div className="p-3 rounded-lg bg-card-bg border border-border-color">
+          <div className="p-3 rounded-lg glass-panel border border-border-color">
             <div className="flex items-center justify-center space-x-1.5">
               <div className="w-2 h-2 bg-primary-accent rounded-full animate-pulse" style={{ animationDelay: '0s' }}></div>
               <div className="w-2 h-2 bg-primary-accent rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
@@ -148,12 +148,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div className={`flex items-start max-w-2xl lg:max-w-4xl ${isUser ? 'flex-row-reverse' : ''}`}>
-        <div className={`h-8 w-8 rounded-full flex-shrink-0 flex items-center justify-center ${isUser ? 'bg-primary-accent text-white ml-3' : 'bg-slate-200 mr-3'}`}>
-          {isUser ? <UserIcon className="h-5 w-5" /> : <AiQuillIcon className="h-5 w-5 text-slate-500" />}
+        <div className={`h-8 w-8 rounded-full flex-shrink-0 flex items-center justify-center border border-border-color ${isUser ? 'bg-primary-accent text-white ml-3' : 'bg-slate-800 mr-3'}`}>
+          {isUser ? <UserIcon className="h-5 w-5" /> : <AiQuillIcon className="h-5 w-5 text-primary-accent" />}
         </div>
         <div
           className={`px-4 py-3 rounded-lg shadow-sm ${
-            isUser ? 'bg-primary-accent text-white' : 'bg-card-bg text-text-primary border border-border-color'
+            isUser
+              ? 'bg-primary-accent text-white border border-primary-accent'
+              : 'glass-panel border border-border-color text-text-primary'
           }`}
         >
           <div
