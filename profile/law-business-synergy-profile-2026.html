@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Law &amp; Business Synergy — Company Profile · Edition 2026</title>
+<style>
+/* ============================================================
+   LAW & BUSINESS SYNERGY — COMPANY PROFILE · EDITION 2026
+   Founder-led (hybrid) editorial profile · print-ready (A4)
+   ============================================================ */
+
+@font-face{
+  font-family:"Garamond";
+  src:url("fonts/EBGaramond.ttf") format("truetype");
+  font-weight:400 800; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Garamond";
+  src:url("fonts/EBGaramond-Italic.ttf") format("truetype");
+  font-weight:400 800; font-style:italic; font-display:swap;
+}
+@font-face{
+  font-family:"Jost";
+  src:url("fonts/Jost.ttf") format("truetype");
+  font-weight:300 700; font-style:normal; font-display:swap;
+}
+
+:root{
+  --ink:#16202e;          /* deep navy-charcoal */
+  --ink-soft:#33414f;
+  --muted:#6a7480;
+  --line:#d8d2c6;
+  --paper:#faf8f3;        /* warm paper */
+  --paper-2:#f3efe6;
+  --gold:#b0894f;         /* muted brass */
+  --gold-deep:#9a7438;
+  --cream:#fbfaf6;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Garamond",Georgia,"Liberation Serif",serif;
+  color:var(--ink);
+  background:#cfc8ba;
+  font-size:11.2pt;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+
+/* ---- label / sans utilities ---- */
+.label{
+  font-family:"Jost",Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.32em;
+  font-weight:500;
+}
+.kicker{
+  font-family:"Jost",Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.42em;
+  font-size:7.4pt;
+  font-weight:500;
+  color:var(--gold-deep);
+}
+.tag{
+  font-family:"Jost",Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:6.6pt;
+  font-weight:500;
+  color:var(--ink-soft);
+  border:.6pt solid var(--line);
+  padding:3pt 7pt;
+  border-radius:1pt;
+  white-space:nowrap;
+  display:inline-block;
+}
+.tag.gold{border-color:var(--gold);color:var(--gold-deep);}
+
+/* ---- page system ---- */
+.page{
+  position:relative;
+  width:210mm;
+  min-height:297mm;
+  margin:7mm auto;
+  background:var(--paper);
+  padding:18mm 17mm 16mm;
+  overflow:hidden;
+  box-shadow:0 6px 26px rgba(0,0,0,.22);
+}
+.page::after{ /* hairline inner frame */
+  content:"";
+  position:absolute; inset:8mm;
+  border:.5pt solid rgba(176,137,79,.28);
+  pointer-events:none;
+}
+.pad{position:relative; z-index:2; height:100%;}
+
+/* running footer */
+.foot{
+  position:absolute; left:17mm; right:17mm; bottom:9mm;
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:"Jost",Arial,sans-serif; font-size:6.6pt;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--muted);
+  z-index:2;
+}
+.foot .dot{color:var(--gold);}
+
+/* section header */
+.sec-head{display:flex; align-items:flex-start; gap:14pt; margin-bottom:14pt;}
+.sec-no{
+  font-family:"Jost",Arial,sans-serif; font-weight:600;
+  font-size:9pt; letter-spacing:.1em; color:var(--gold-deep);
+  border:.8pt solid var(--gold); border-radius:50%;
+  width:26pt; height:26pt; min-width:26pt;
+  display:flex; align-items:center; justify-content:center;
+  margin-top:3pt;
+}
+.sec-title{font-size:23pt; line-height:1.12; font-weight:600; letter-spacing:.005em;}
+.sec-title em{font-style:italic; color:var(--gold-deep);}
+.sec-sub{margin-top:5pt;}
+
+h1,h2,h3,h4{margin:0; font-weight:600;}
+p{margin:0 0 8pt;}
+.lead{font-size:12.4pt; line-height:1.6; color:var(--ink-soft);}
+.rule{height:.7pt; background:var(--line); border:0; margin:12pt 0;}
+.rule.gold{background:linear-gradient(90deg,var(--gold),rgba(176,137,79,0));}
+.flourish{color:var(--gold); letter-spacing:.6em; font-size:9pt;}
+
+/* ============ COVER ============ */
+.cover{
+  background:
+    radial-gradient(120% 80% at 50% -10%, #1d2a3c 0%, var(--ink) 55%, #0f1722 100%);
+  color:#efe9dd; padding:0;
+}
+.cover::after{border-color:rgba(176,137,79,.45);}
+.cover .pad{
+  height:261mm;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; padding:22mm 20mm;
+}
+.cover .topmark{margin-top:4mm;}
+.cover .firm{
+  font-size:30pt; font-weight:600; letter-spacing:.14em;
+  line-height:1.25; margin-top:3mm;
+}
+.cover .firm .amp{color:var(--gold); font-style:italic; font-weight:500;}
+.cover .seal{
+  margin:11mm auto 9mm;
+  width:74pt; height:74pt; border-radius:50%;
+  border:1pt solid rgba(176,137,79,.6);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.cover .seal::before{
+  content:""; position:absolute; inset:5pt; border-radius:50%;
+  border:.5pt solid rgba(176,137,79,.35);
+}
+.cover .seal span{font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.3em; color:var(--gold);}
+.cover .ptitle{
+  font-size:15pt; letter-spacing:.5em; text-transform:uppercase;
+  font-family:"Jost",sans-serif; font-weight:300; margin-top:2mm; color:#e9e2d3;
+}
+.cover .disc{
+  margin-top:6mm; max-width:135mm; color:#bcc3cd;
+  font-size:11pt; line-height:1.6; font-style:italic;
+}
+.cover .spacer{flex:1;}
+.cover .services{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:6pt 0;
+  max-width:150mm; margin:0 auto;
+}
+.cover .services span{
+  font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.2em;
+  text-transform:uppercase; color:#cdd3dc; padding:0 9pt;
+  border-right:.6pt solid rgba(205,211,220,.3);
+}
+.cover .services span:last-child{border-right:0;}
+.cover .founder{
+  margin-top:9mm; font-size:13pt; letter-spacing:.06em;
+}
+.cover .founder .role{
+  display:block; font-family:"Jost",sans-serif; font-size:7.2pt;
+  letter-spacing:.34em; text-transform:uppercase; color:var(--gold);
+  margin-top:3pt;
+}
+.cover .cities{
+  margin-top:8mm; font-family:"Jost",sans-serif; font-size:8.5pt;
+  letter-spacing:.46em; text-transform:uppercase; color:#e9e2d3;
+}
+.cover .edition{
+  margin-top:6mm; font-family:"Jost",sans-serif; font-size:7pt;
+  letter-spacing:.4em; text-transform:uppercase; color:#9aa3ad;
+}
+
+/* ============ generic content blocks ============ */
+.two-col{column-count:2; column-gap:13mm; text-align:justify;}
+.pull{
+  border-left:2pt solid var(--gold); padding:2pt 0 2pt 12pt;
+  font-style:italic; font-size:13pt; color:var(--ink-soft); margin:6pt 0;
+}
+
+.grid{display:grid; gap:9pt;}
+.g2{grid-template-columns:1fr 1fr;}
+.g3{grid-template-columns:1fr 1fr 1fr;}
+.g4{grid-template-columns:repeat(4,1fr);}
+
+.card{
+  border:.7pt solid var(--line); background:var(--cream);
+  padding:11pt 12pt; border-radius:2pt; position:relative;
+}
+.card .n{
+  font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.2em;
+  color:var(--gold-deep); font-weight:600;
+}
+.card h4{font-size:12.5pt; margin:3pt 0 4pt; letter-spacing:.01em;}
+.card p{font-size:9.4pt; line-height:1.5; color:var(--ink-soft); margin:0;}
+.card.feature{background:linear-gradient(180deg,#fff,#f6f2e9);}
+
+/* feature list (the firm strengths) */
+.feat{display:grid; grid-template-columns:1fr 1fr; gap:10pt 14pt; margin-top:4pt;}
+.feat .item .h{display:flex; align-items:baseline; gap:7pt;}
+.feat .item .h .mk{color:var(--gold); font-size:8pt;}
+.feat .item h4{font-size:11.5pt;}
+.feat .item .sub{font-family:"Jost",sans-serif; font-size:6.8pt; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-deep); margin:2pt 0 3pt;}
+.feat .item p{font-size:9.2pt; line-height:1.48; color:var(--ink-soft);}
+
+/* founder credential chips */
+.chips{display:flex; flex-wrap:wrap; gap:5pt; margin-top:9pt;}
+.chip{
+  font-family:"Jost",sans-serif; font-size:6.6pt; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--ink); background:var(--paper-2);
+  border:.6pt solid var(--line); padding:4pt 8pt; border-radius:1pt;
+}
+
+/* jurisdiction map blocks */
+.juris{display:grid; grid-template-columns:repeat(4,1fr); gap:9pt; margin-top:6pt;}
+.juris .j{border:.7pt solid var(--line); background:var(--cream); padding:11pt 11pt 12pt;}
+.juris .j .city{font-size:15pt; font-weight:600; letter-spacing:.02em;}
+.juris .j .cc{font-family:"Jost",sans-serif; font-size:6.6pt; letter-spacing:.26em; text-transform:uppercase; color:var(--gold-deep); margin-top:2pt;}
+.juris .j .meta{font-size:8.8pt; color:var(--muted); margin-top:6pt; line-height:1.4;}
+
+.intl{display:grid; grid-template-columns:repeat(4,1fr); gap:8pt; margin-top:9pt;}
+.intl .i{text-align:center; border:.6pt dashed var(--line); padding:9pt 6pt; background:transparent;}
+.intl .i .nm{font-size:11.5pt; font-weight:600;}
+.intl .i .ds{font-family:"Jost",sans-serif; font-size:6.2pt; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-top:3pt;}
+
+/* in-house roster */
+.roster{display:grid; grid-template-columns:1fr 1fr; gap:9pt; margin-top:4pt;}
+.org{border:.7pt solid var(--line); background:var(--cream); padding:10pt 12pt; display:flex; gap:11pt; align-items:flex-start;}
+.org .mono{
+  font-family:"Jost",sans-serif; font-weight:600; font-size:12pt; color:#fff;
+  background:var(--ink); width:30pt; height:30pt; min-width:30pt; border-radius:2pt;
+  display:flex; align-items:center; justify-content:center; letter-spacing:.02em;
+}
+.org .mono.g{background:var(--gold-deep);}
+.org h4{font-size:11.8pt;}
+.org .role{font-family:"Jost",sans-serif; font-size:6.8pt; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-deep); margin:2pt 0 4pt;}
+.org .when{font-family:"Jost",sans-serif; font-size:6.4pt; letter-spacing:.14em; color:var(--muted); float:right;}
+.org p{font-size:9pt; line-height:1.46; color:var(--ink-soft); margin:0;}
+
+/* notable matters */
+.matter{
+  border:.7pt solid var(--line); background:var(--cream);
+  padding:12pt 13pt; margin-bottom:9pt; position:relative;
+}
+.matter.flag{border-color:var(--gold); background:linear-gradient(180deg,#fff,#f7f2e8);}
+.matter .cat{font-family:"Jost",sans-serif; font-size:6.6pt; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:4pt;}
+.matter h4{font-size:14pt; letter-spacing:.01em;}
+.matter h4 .loc{font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.2em; color:var(--muted); font-weight:400; margin-left:6pt; text-transform:uppercase;}
+.matter p{font-size:9.5pt; line-height:1.5; color:var(--ink-soft); margin:5pt 0 7pt;}
+.matter .tags{display:flex; flex-wrap:wrap; gap:5pt;}
+
+/* timeline */
+.tl{position:relative; margin-top:6pt;}
+.tl .row{display:grid; grid-template-columns:34mm 1fr; gap:10pt; padding:9pt 0; border-top:.6pt solid var(--line);}
+.tl .row:first-child{border-top:0;}
+.tl .when{font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-deep); line-height:1.5;}
+.tl .when .geo{display:block; color:var(--muted); margin-top:3pt; letter-spacing:.12em;}
+.tl .role{font-size:13pt; font-weight:600;}
+.tl .org{font-family:"Jost",sans-serif; font-size:7.6pt; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:2pt 0 5pt;}
+.tl ul{margin:0; padding-left:12pt;}
+.tl li{font-size:9pt; line-height:1.46; color:var(--ink-soft); margin-bottom:2.5pt;}
+.tl li b{color:var(--ink); font-weight:600;}
+
+/* education / certs */
+.edu .e{border-left:2pt solid var(--gold); padding:1pt 0 1pt 11pt; margin-bottom:11pt;}
+.edu .e h4{font-size:12.5pt;}
+.edu .e .inst{font-family:"Jost",sans-serif; font-size:7pt; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-deep); margin:2pt 0;}
+.edu .e .yr{font-family:"Jost",sans-serif; font-size:6.8pt; letter-spacing:.16em; color:var(--muted);}
+.edu .e p{font-size:9pt; color:var(--ink-soft); margin:3pt 0 0;}
+
+.certs{display:grid; grid-template-columns:1fr 1fr; gap:9pt;}
+.cert{border:.7pt solid var(--line); background:var(--cream); padding:10pt 11pt;}
+.cert h4{font-size:11pt; line-height:1.25;}
+.cert .meta{font-family:"Jost",sans-serif; font-size:6.4pt; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-deep); margin:3pt 0;}
+.cert p{font-size:8.6pt; color:var(--muted); margin:0;}
+
+/* competencies */
+.comp{display:grid; grid-template-columns:1fr 1fr; gap:11pt 16pt;}
+.comp .col h4{font-family:"Jost",sans-serif; font-size:7.4pt; letter-spacing:.26em; text-transform:uppercase; color:var(--gold-deep); border-bottom:.7pt solid var(--line); padding-bottom:5pt; margin-bottom:6pt;}
+.comp ul{margin:0; padding:0; list-style:none;}
+.comp li{font-size:9.6pt; padding:2.5pt 0 2.5pt 13pt; position:relative; color:var(--ink-soft);}
+.comp li::before{content:"\2666"; color:var(--gold); position:absolute; left:0; font-size:7pt; top:4pt;}
+
+/* why / reasons */
+.reasons{counter-reset:r;}
+.reason{display:grid; grid-template-columns:20pt 1fr; gap:11pt; padding:9pt 0; border-top:.6pt solid var(--line);}
+.reason:first-child{border-top:0;}
+.reason .num{counter-increment:r; font-family:"Jost",sans-serif; font-weight:600; font-size:10pt; color:var(--gold-deep);}
+.reason .num::before{content:"0" counter(r);}
+.reason h4{font-size:13pt; margin-bottom:3pt;}
+.reason p{font-size:9.5pt; line-height:1.5; color:var(--ink-soft); margin:0;}
+
+/* numbers band */
+.numbers{display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:14pt; border:.7pt solid var(--line); background:var(--ink); color:#efe9dd;}
+.numbers .num-i{padding:14pt 8pt; text-align:center; border-right:.5pt solid rgba(255,255,255,.12);}
+.numbers .num-i:last-child{border-right:0;}
+.numbers .big{font-size:27pt; font-weight:600; color:#fff; line-height:1;}
+.numbers .big small{color:var(--gold); font-size:18pt;}
+.numbers .cap{font-family:"Jost",sans-serif; font-size:6.4pt; letter-spacing:.22em; text-transform:uppercase; color:#aeb6c0; margin-top:6pt; line-height:1.4;}
+
+/* contact / closing */
+.contact{background:radial-gradient(120% 90% at 50% 0%, #1d2a3c, var(--ink) 60%, #0f1722); color:#efe9dd;}
+.contact::after{border-color:rgba(176,137,79,.45);}
+.contact .pad{display:flex; flex-direction:column; height:261mm; padding:24mm 20mm;}
+.contact h2{font-size:25pt; font-weight:600; line-height:1.18;}
+.contact h2 em{font-style:italic; color:var(--gold);}
+.contact .cgrid{display:grid; grid-template-columns:1fr 1fr; gap:13pt 22pt; margin-top:16mm;}
+.contact .ci .l{font-family:"Jost",sans-serif; font-size:6.8pt; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:4pt;}
+.contact .ci .v{font-size:12.5pt; color:#f2ece0;}
+.contact .ci .v small{display:block; font-size:9pt; color:#aeb6c0; margin-top:2pt;}
+.contact .close{margin-top:auto;}
+.contact .cities2{font-family:"Jost",sans-serif; font-size:8pt; letter-spacing:.36em; text-transform:uppercase; color:#e9e2d3; text-align:center;}
+.contact .copy{font-size:8.4pt; color:#8c95a0; text-align:center; margin-top:9pt; line-height:1.5; font-style:italic;}
+
+@media print{
+  body{background:none;}
+  .page{margin:0; box-shadow:none; page-break-after:always; width:auto; min-height:auto; height:297mm;}
+  .page:last-child{page-break-after:auto;}
+  @page{size:A4; margin:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="page cover">
+  <div class="pad">
+    <div class="topmark flourish">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>
+    <div class="firm">Law <span class="amp">&amp;</span> Business Synergy</div>
+    <div class="seal"><span>L&nbsp;B&nbsp;S</span></div>
+    <div class="ptitle">Company Profile</div>
+    <div class="disc">A boutique cross-border legal practice — where commercial pragmatism meets legal precision across the Middle East and North Africa.</div>
+
+    <div class="spacer"></div>
+
+    <div class="services">
+      <span>Corporate Establishment</span><span>Infrastructure &amp; FIDIC</span><span>International Arbitration</span><span>Cross-Border M&amp;A</span><span>EPC Advisory</span><span>Regulatory Compliance</span>
+    </div>
+
+    <div class="founder">
+      Amr Reda Abdullatif
+      <span class="role">Founder &amp; Principal &middot; Regional Legal Counsel &middot; ACIArb</span>
+    </div>
+
+    <div class="cities">Cairo &middot; Dubai &middot; Muscat &middot; Riyadh</div>
+    <div class="edition">Edition 2026</div>
+  </div>
+</section>
+
+<!-- ============================ 01 THE FIRM ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">The Practice</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">01</div>
+      <div>
+        <div class="sec-title">The Firm. Where commercial<br>pragmatism meets <em>legal precision.</em></div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.26em;">A Boutique Cross-Border Practice &middot; Founder-Led &middot; Headquartered in Cairo</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="two-col">
+      <p class="lead" style="margin-bottom:10pt;">Law &amp; Business Synergy is a boutique legal practice headquartered in Cairo and serving clients across the Middle East and North Africa. It was founded on a single conviction: that exceptional legal counsel is not a back-office function — it is a commercial accelerator.</p>
+      <p>Our role is not merely to identify legal risk, but to engineer pathways that allow business decisions to be executed with confidence, speed, and enforceability. We deliver senior-level legal advisory to international corporations, infrastructure developers, sovereign-backed projects, financial institutions, and growth-stage enterprises operating in — or expanding into — the Arab region&rsquo;s most complex commercial environments.</p>
+      <p>Every engagement is led personally by the firm&rsquo;s Principal, ensuring continuity, accountability, and the strategic depth that mid-market clients rarely access from larger institutional practices. The firm&rsquo;s signature strength lies at the intersection of FIDIC-based infrastructure contracts, M&amp;A transactions, and the regulatory regimes of Egypt, the UAE, Oman, and Saudi Arabia.</p>
+    </div>
+
+    <div class="pull">&ldquo;The law must be stable, but it must not stand still.&rdquo; — Roscoe Pound, Dean of Harvard Law School, 1923</div>
+
+    <hr class="rule">
+
+    <div class="feat">
+      <div class="item">
+        <div class="h"><span class="mk">&#10022;</span><h4>Regional Depth</h4></div>
+        <div class="sub">Four MENA Jurisdictions</div>
+        <p>Active practice across Egypt, the UAE, Oman, and KSA — with first-hand experience of GAFI, MoCI, ADGM, DIFC, and the Saudi Ministry of Commerce.</p>
+      </div>
+      <div class="item">
+        <div class="h"><span class="mk">&#10022;</span><h4>Infrastructure Specialism</h4></div>
+        <div class="sub">Full-Spectrum FIDIC &amp; EPC</div>
+        <p>Design &amp; Build, railway systems, military and civil aviation, port and rail integration, and dispute-avoidance mechanisms.</p>
+      </div>
+      <div class="item">
+        <div class="h"><span class="mk">&#10022;</span><h4>Commercial Fluency</h4></div>
+        <div class="sub">Embedded Business Partner</div>
+        <p>In-house tenure across construction, FMCG, real estate, and FinTech — counsel delivered with operational pragmatism.</p>
+      </div>
+      <div class="item">
+        <div class="h"><span class="mk">&#10022;</span><h4>Dispute-Avoidance First</h4></div>
+        <div class="sub">ACIArb &amp; LCIA YIAG</div>
+        <p>We structure contracts to prevent disputes — and represent clients decisively when arbitration becomes unavoidable.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Law &amp; Business Synergy</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 02 THE FOUNDER ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">The Principal</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">02</div>
+      <div>
+        <div class="sec-title">The Founder. <em>Vision,</em><br>expertise, leadership.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.24em;">Amr Reda Abdullatif &middot; Founder &amp; Principal &middot; Regional Legal Counsel</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div style="display:grid; grid-template-columns:1fr 60mm; gap:14mm;">
+      <div>
+        <p class="lead">Amr Reda Abdullatif is a regional corporate lawyer and infrastructure-contracts specialist with more than eight years of in-house and advisory practice across Egypt, the United Arab Emirates, the Sultanate of Oman, and the Kingdom of Saudi Arabia.</p>
+        <p>He is the Founder and Principal of Law &amp; Business Synergy, serving concurrently as Regional Legal Counsel to one of the Middle East&rsquo;s largest construction and infrastructure groups. An Associate of the Chartered Institute of Arbitrators (ACIArb) and FIDIC-certified dispute-resolution practitioner, Mr.&nbsp;Abdullatif advises governments, multinational contractors, and private investors on cross-border mega-projects — from high-speed railway systems linking the Gulf states to EPC contracts for power, transport, and military infrastructure across MENA.</p>
+        <p>He is the appointed LCIA YIAG Regional Arbitrator Representative for the Middle East and a contributing author to Lexis&reg; Middle East, <em>IBERIAN LAWYER</em>, and <em>Legalcommunity MENA</em>. His practice combines the precision of common-law contract drafting (TOLES / Cambridge Law Studio) with deep fluency in the civil-law systems of Egypt and the GCC.</p>
+        <div class="chips">
+          <span class="chip">ACIArb &middot; CIArb</span>
+          <span class="chip">FIDIC CLAC 050</span>
+          <span class="chip">TOLES &middot; UK Law</span>
+          <span class="chip">LCIA YIAG &middot; MENA Rep.</span>
+          <span class="chip">Bar No. 607306</span>
+          <span class="chip">LL.M. &middot; Ain Shams</span>
+          <span class="chip">LL.B. &middot; Cairo Univ.</span>
+        </div>
+      </div>
+      <aside style="border-left:.7pt solid var(--line); padding-left:9mm;">
+        <div class="label" style="font-size:6.6pt;letter-spacing:.24em;color:var(--gold-deep);">Admission</div>
+        <p style="font-size:9.4pt;margin:4pt 0 12pt;color:var(--ink-soft);">Egyptian Bar Association<br>Court of Appeal<br><b>Licence No. 607306</b></p>
+        <div class="label" style="font-size:6.6pt;letter-spacing:.24em;color:var(--gold-deep);">Concurrent Role</div>
+        <p style="font-size:9.4pt;margin:4pt 0 12pt;color:var(--ink-soft);">Regional Legal Counsel<br>Hassan Allam Holding &middot; Kortech</p>
+        <div class="label" style="font-size:6.6pt;letter-spacing:.24em;color:var(--gold-deep);">Languages</div>
+        <p style="font-size:9.4pt;margin:4pt 0 12pt;color:var(--ink-soft);">Arabic &amp; English<br>Legal Translation: Arabic &rlm;&harr;&lrm; English</p>
+        <div class="label" style="font-size:6.6pt;letter-spacing:.24em;color:var(--gold-deep);">Publishing</div>
+        <p style="font-size:9.4pt;margin:4pt 0 0;color:var(--ink-soft);">Lexis&reg; Middle East<br>IBERIAN LAWYER<br>Legalcommunity MENA</p>
+      </aside>
+    </div>
+  </div>
+  <div class="foot"><span>Amr Reda Abdullatif &middot; Founder &amp; Principal</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 03 REACH / JURISDICTIONS ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Geographic Reach</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">03</div>
+      <div>
+        <div class="sec-title">Reach. Four core markets,<br>one <em>international</em> footprint.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.22em;">Core Practice &middot; Egypt &middot; UAE &middot; Oman &middot; Saudi Arabia</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <p style="margin-bottom:10pt;color:var(--ink-soft);">The firm&rsquo;s core practice spans the four most economically active MENA jurisdictions, supported by direct professional exposure across Europe and the United Kingdom through legal-research, English-law, and academic engagements.</p>
+
+    <div class="juris">
+      <div class="j"><div class="city">Cairo</div><div class="cc">Egypt &middot; Headquarters</div><div class="meta">GAFI &middot; Bar Court of Appeal. Corporate, infrastructure &amp; litigation base.</div></div>
+      <div class="j"><div class="city">Dubai</div><div class="cc">UAE &middot; Practice</div><div class="meta">Federal &middot; ADGM &middot; DIFC frameworks. Cross-border structuring &amp; arbitration.</div></div>
+      <div class="j"><div class="city">Muscat</div><div class="cc">Oman &middot; Practice</div><div class="meta">MoCI &middot; FDI &amp; market entry. Rail-corridor &amp; investment mandates.</div></div>
+      <div class="j"><div class="city">Riyadh</div><div class="cc">KSA &middot; Practice</div><div class="meta">Ministry of Commerce &middot; ZATCA. Giga-project &amp; group structuring.</div></div>
+    </div>
+
+    <hr class="rule">
+    <div class="label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.26em;margin-bottom:8pt;">International &amp; Cross-Border Exposure</div>
+    <div class="intl">
+      <div class="i"><div class="nm">Italy</div><div class="ds">Milan &middot; Legal Research<br>LC Publishing Group</div></div>
+      <div class="i"><div class="nm">United Kingdom</div><div class="ds">English Law &middot; TOLES<br>Commercial-Law Internship</div></div>
+      <div class="i"><div class="nm">United States</div><div class="ds">Illinois &middot; Corporate &amp;<br>Commercial Law Coursework</div></div>
+      <div class="i"><div class="nm">Yemen</div><div class="ds">Cross-Border M&amp;A<br>ARMA &times; HSA Group</div></div>
+    </div>
+
+    <hr class="rule">
+    <div class="grid g4">
+      <div class="card"><div class="n">EGYPT</div><h4 style="font-size:11pt">Civil &amp; Commercial</h4><p>GAFI registration, litigation, securities &amp; procurement law.</p></div>
+      <div class="card"><div class="n">UAE</div><h4 style="font-size:11pt">Federal &amp; Free-Zone</h4><p>ADGM &amp; DIFC entities, SPV architecture, M&amp;A.</p></div>
+      <div class="card"><div class="n">OMAN</div><h4 style="font-size:11pt">Commercial Law</h4><p>FDI &amp; market entry, seconded in-house counsel.</p></div>
+      <div class="card"><div class="n">SAUDI ARABIA</div><h4 style="font-size:11pt">Commercial Regs</h4><p>Ministry of Commerce, ZATCA, giga-project EPC.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Geographic Reach</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 04 IN-HOUSE & ADVISORY TENURE ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Organisations Served</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">04</div>
+      <div>
+        <div class="sec-title">In-House &amp; advisory <em>tenure.</em><br>Eight years, six organisations.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.22em;">Embedded Counsel Across Construction, Consumer Goods, Law &amp; Legal Media</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <p style="margin-bottom:9pt;color:var(--ink-soft);">The firm&rsquo;s pragmatism is built on years spent <em>inside</em> the organisations it now advises — as regional counsel, compliance officer, seconded in-house lawyer, and legal researcher.</p>
+
+    <div class="roster">
+      <div class="org">
+        <div class="mono g">HA</div>
+        <div style="flex:1;"><span class="when">Apr 2024 — Present</span><h4>Hassan Allam Holding &middot; Kortech</h4><div class="role">Regional Legal Counsel</div><p>Regional counsel to one of the Middle East&rsquo;s largest construction &amp; infrastructure groups — mega-project structuring, cross-border compliance, and group governance across Egypt, UAE, Oman &amp; KSA.</p></div>
+      </div>
+      <div class="org">
+        <div class="mono">AJ</div>
+        <div style="flex:1;"><span class="when">Sep 2023 — Feb 2024</span><h4>Dr. Ahmed Al Jahwari &amp; Partner</h4><div class="role">Legal Counsel &middot; Oman</div><p>FDI &amp; market entry for multinationals; seconded in-house counsel to Omani companies across energy, construction &amp; financial services.</p></div>
+      </div>
+      <div class="org">
+        <div class="mono">LC</div>
+        <div style="flex:1;"><span class="when">Jan 2023 — May 2024</span><h4>LC Publishing Group S.p.A.</h4><div class="role">Legal Researcher &middot; Milan, Italy</div><p>MENA legal-market intelligence and authored articles for <em>IBERIAN LAWYER</em> and <em>Legalcommunity MENA</em>.</p></div>
+      </div>
+      <div class="org">
+        <div class="mono g">AR</div>
+        <div style="flex:1;"><span class="when">Jan 2022 — Jan 2023</span><h4>ARMA Group</h4><div class="role">Corporate Lawyer &amp; Compliance Officer</div><p>Led ARMA Egypt &times; HSA Group (Yemen) cross-border M&amp;A; AML, governance, IP &amp; commercial-contract management.</p></div>
+      </div>
+      <div class="org">
+        <div class="mono">RC</div>
+        <div style="flex:1;"><span class="when">Jan 2020 — Jan 2022</span><h4>REDCON Construction Co. S.A.E.</h4><div class="role">Lawyer &amp; Legal Affairs</div><p>High-value construction contracts, RFPs &amp; subcontracts; civil and criminal litigation portfolio with executive reporting.</p></div>
+      </div>
+      <div class="org">
+        <div class="mono">EM</div>
+        <div style="flex:1;"><span class="when">Sep 2017 — Jan 2020</span><h4>El Mahmal Group</h4><div class="role">Lawyer</div><p>Litigation, enforcement &amp; post-judgment settlements; pleadings, appeals and commercial drafting with courtroom advocacy.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>In-House &amp; Advisory Tenure</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 05 PRACTICE AREAS ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Practice Areas</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">05</div>
+      <div>
+        <div class="sec-title">Six core disciplines,<br>one <em>integrated</em> practice.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.22em;">Anchored in Technical Expertise &middot; Supported by a Regional Network</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="grid g2">
+      <div class="card feature"><div class="n">01</div><h4>International Arbitration</h4><p>FIDIC DAB/DRB proceedings, ICC and LCIA arbitration, drafting of arbitration agreements, and enforcement of awards across MENA seats.</p></div>
+      <div class="card feature"><div class="n">02</div><h4>FIDIC &amp; EPC Contracts</h4><p>Lifecycle management of FIDIC Red, Yellow, and Silver Books; EPC and Design-and-Build contracts for railway, energy, and mega-infrastructure projects.</p></div>
+      <div class="card feature"><div class="n">03</div><h4>Cross-Border M&amp;A</h4><p>Deal structuring, legal due diligence, governance frameworks, regulatory filings, share transfers, and post-merger integration across MENA jurisdictions.</p></div>
+      <div class="card feature"><div class="n">04</div><h4>Corporate Establishment</h4><p>End-to-end entity formation in Egypt and the GCC — OPC, LLC, joint ventures, branch offices, GAFI registration, tax setup, and security clearances.</p></div>
+      <div class="card feature"><div class="n">05</div><h4>Regulatory Compliance</h4><p>Multi-jurisdictional compliance frameworks for the UAE, Oman, KSA, and Egypt — covering AML, UBO, FDI, sanctions, and data-protection regimes.</p></div>
+      <div class="card feature"><div class="n">06</div><h4>Contract Drafting</h4><p>Bespoke commercial agreements, JVAs, shareholders agreements, LOAs, vendor frameworks, and modular template libraries for corporate groups.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Practice Areas</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 06 INDUSTRIES ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Industries Served</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">06</div>
+      <div>
+        <div class="sec-title">Sector-specific fluency,<br><em>cross-sector</em> judgment.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.22em;">Eight Years of In-House &amp; Advisory Tenure Across These Sectors</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="grid g3">
+      <div class="card"><div class="n">01</div><h4>Construction &amp; Infrastructure</h4><p>FIDIC &amp; EPC works, Design &amp; Build, contractor-state risk allocation.</p></div>
+      <div class="card"><div class="n">02</div><h4>Railway &amp; Transport</h4><p>High-speed rail, integration contracts, rail-corridor SPVs.</p></div>
+      <div class="card"><div class="n">03</div><h4>Energy &amp; Utilities</h4><p>Power and utilities EPC, works contracts, regulatory clearance.</p></div>
+      <div class="card"><div class="n">04</div><h4>Real Estate &amp; Development</h4><p>Mixed-use, giga-project packages, development structuring.</p></div>
+      <div class="card"><div class="n">05</div><h4>Hospitality &amp; Wellness</h4><p>Resort, hotel &amp; medical-wellness works contracts (AMAALA Triple Bay).</p></div>
+      <div class="card"><div class="n">06</div><h4>Cultural &amp; Heritage</h4><p>Museum, cultural &amp; giga-project assets (Diriyah Gate portfolio).</p></div>
+      <div class="card"><div class="n">07</div><h4>Heavy Equipment &amp; Machinery</h4><p>Industrial-equipment supply, distribution &amp; JV structuring (Zoomlion).</p></div>
+      <div class="card"><div class="n">08</div><h4>Defense &amp; Aviation</h4><p>Military airport &amp; civil-aviation works; security-clearance frameworks.</p></div>
+      <div class="card"><div class="n">09</div><h4>Financial Services &amp; FinTech</h4><p>Digital-finance regulation, AML/UBO, FinTech market entry.</p></div>
+      <div class="card"><div class="n">10</div><h4>Manufacturing &amp; FMCG</h4><p>Consumer-goods M&amp;A, vendor frameworks, IP &amp; equity management.</p></div>
+      <div class="card"><div class="n">11</div><h4>Technology &amp; Digital Economy</h4><p>Digital transformation, legal-tech adoption &amp; data protection.</p></div>
+      <div class="card"><div class="n">12</div><h4>Legal Media &amp; Publishing</h4><p>Legal-market intelligence &amp; authoritative MENA legal publishing.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Industries Served</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 07 NOTABLE MATTERS (A) ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Notable Matters</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">07</div>
+      <div>
+        <div class="sec-title">Landmark projects,<br><em>cross-border</em> execution.</div>
+        <div class="sec-sub label" style="font-size:6.6pt;color:var(--muted);letter-spacing:.18em;">Subject to Applicable Confidentiality Undertakings &middot; Further Detail Available on Request</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="matter">
+      <div class="cat">&#10022; Flagship Cross-Border Infrastructure</div>
+      <h4>Hafeet Rail — Oman&ndash;UAE High-Speed Railway <span class="loc">UAE / Oman</span></h4>
+      <p>Lead contract counsel on the Hafeet Rail high-speed electric train project linking the Sultanate of Oman with the United Arab Emirates. Negotiated and executed Design &amp; Build Railway Systems and Integration contracts; engineered enhanced indemnity, performance-security, and risk-allocation provisions that materially reduced joint-venture exposure.</p>
+      <div class="tags"><span class="tag gold">Railway &middot; High-Speed</span><span class="tag">Design &amp; Build</span><span class="tag">FIDIC</span><span class="tag">UAE / Oman</span></div>
+    </div>
+
+    <div class="matter">
+      <div class="cat">&#10022; Cross-Border Rail Corridor</div>
+      <h4>Abu Dhabi&ndash;Sohar Railway <span class="loc">UAE / Oman</span></h4>
+      <p>Contributed to negotiation, drafting, and development of the legal framework for the Abu Dhabi&ndash;Sohar Railway. Supported the corporate structuring and establishment of Kortech UAE within the project&rsquo;s special-purpose-vehicle architecture — including governance, capitalisation, and intra-group service arrangements.</p>
+      <div class="tags"><span class="tag gold">Rail Corridor</span><span class="tag">SPV Structuring</span><span class="tag">UAE / Oman</span></div>
+    </div>
+
+    <div class="matter">
+      <div class="cat">&#10022; National Railway Infrastructure</div>
+      <h4>Port Said&ndash;Alamein Train Project <span class="loc">Egypt</span></h4>
+      <p>Comprehensive legal advisory on the Port Said&ndash;Alamein train project, including EPC contract structuring, government-counterparty negotiations, regulatory compliance under Egyptian transport and procurement law, and allocation of construction, performance, and political risk between project participants.</p>
+      <div class="tags"><span class="tag gold">EPC Contract</span><span class="tag">Government Counterparty</span><span class="tag">Egypt</span></div>
+    </div>
+
+    <div class="matter">
+      <div class="cat">&#10022; Defense &amp; Aviation Infrastructure</div>
+      <h4>Bernice Military Airport <span class="loc">Egypt</span></h4>
+      <p>Specialised legal counsel on the Bernice Military Airport project, covering high-value construction agreements, defense-sector regulatory clearances, contractor-state risk allocation, and confidentiality and security-clearance frameworks specific to sensitive military infrastructure.</p>
+      <div class="tags"><span class="tag gold">Defense Infrastructure</span><span class="tag">Security Clearance</span><span class="tag">Egypt</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Notable Matters &middot; I</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 07 NOTABLE MATTERS (B) ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Notable Matters &middot; Continued</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">07</div>
+      <div>
+        <div class="sec-title">Saudi giga-projects.<br>Vision 2030 <em>mandates.</em></div>
+        <div class="sec-sub label" style="font-size:6.6pt;color:var(--muted);letter-spacing:.18em;">Flagship KSA Developments &middot; EPC &amp; Works &middot; Cultural, Hospitality &amp; Industrial</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <!-- NEW MATTER: AMAALA / Tadawul (sourced from CV) -->
+    <div class="matter flag">
+      <div class="cat">&#10022; Saudi Giga-Projects &middot; EPC &amp; Works</div>
+      <h4>AMAALA Triple Bay &amp; Tadawul Tower / KAFD <span class="loc">Saudi Arabia</span></h4>
+      <p>Led legal review, negotiation, and drafting on EPC and works contracts for flagship Saudi developments — including the Marina Hotel and the Medical Wellness Resort at <b>AMAALA Triple Bay</b>, and the <b>Tadawul Tower</b> offices together with the KAFD enhancement packages at the King Abdullah Financial District — aligning risk allocation, scope, and payment mechanisms with the company&rsquo;s commercial interests.</p>
+      <div class="tags"><span class="tag gold">Giga-Project</span><span class="tag">EPC &amp; Works</span><span class="tag">Hospitality / Commercial</span><span class="tag">KSA</span></div>
+    </div>
+
+    <!-- NEW MATTER: New Diriyah Museum (confirmed by client; general copy pending detail) -->
+    <div class="matter flag">
+      <div class="cat">&#10022; Cultural &amp; Heritage Infrastructure</div>
+      <h4>New Diriyah Museum <span class="loc">Saudi Arabia</span></h4>
+      <p>Advisory on works and contract packages for a landmark cultural-heritage development within the Kingdom&rsquo;s giga-project portfolio — addressing scope definition, contractor risk allocation, and payment-mechanism alignment for a flagship museum asset.</p>
+      <div class="tags"><span class="tag gold">Cultural / Heritage</span><span class="tag">Works Contract</span><span class="tag">Giga-Project</span><span class="tag">KSA</span></div>
+    </div>
+
+    <!-- NEW MATTER: Zoomlion / NAMAA (confirmed by client; general copy pending detail) -->
+    <div class="matter flag">
+      <div class="cat">&#10022; Heavy Equipment &amp; Industrial Machinery</div>
+      <h4>Zoomlion &times; NAMAA <span class="loc">Saudi Arabia / Cross-Border</span></h4>
+      <p>Corporate and commercial structuring supporting a heavy-equipment and industrial-machinery arrangement between Zoomlion and NAMAA — covering supply and distribution terms, joint-venture / agency framework, and intra-group commercial alignment.</p>
+      <div class="tags"><span class="tag gold">Heavy Equipment</span><span class="tag">JV / Distribution</span><span class="tag">Commercial Structuring</span><span class="tag">KSA</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Notable Matters &middot; II</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 07 NOTABLE MATTERS (C) ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Notable Matters &middot; Continued</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">07</div>
+      <div>
+        <div class="sec-title">Group restructuring &amp;<br>cross-border <em>M&amp;A.</em></div>
+        <div class="sec-sub label" style="font-size:6.6pt;color:var(--muted);letter-spacing:.18em;">Offshore Group Architecture &middot; Multi-Jurisdictional Due Diligence</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="matter">
+      <div class="cat">&#10022; M&amp;A / Group Restructuring</div>
+      <h4>Kortech Saudi &amp; Offshore Group Structuring <span class="loc">KSA &middot; UAE &middot; Oman &middot; Egypt</span></h4>
+      <p>Led legal due diligence and corporate-governance structuring of five offshore entities — including Hassan Allam Electromechanical Kortech Saudi — ensuring compliance with the Saudi Ministry of Commerce, ZATCA, and parallel regimes in the UAE, Oman, and Egypt. Designed intra-group service agreements, transfer-pricing-aware contracts, and governance charters aligned with consolidated group policy.</p>
+      <div class="tags"><span class="tag gold">M&amp;A &middot; Restructuring</span><span class="tag">5 Entities</span><span class="tag">ZATCA &middot; MoCI</span></div>
+    </div>
+
+    <div class="matter">
+      <div class="cat">&#10022; FMCG / Consumer Goods</div>
+      <h4>ARMA Egypt &times; HSA Group — Cross-Border M&amp;A <span class="loc">Egypt / Yemen &middot; 2022</span></h4>
+      <p>Orchestrated the merger and acquisition procedures between Arma Egypt and the Yemeni HSA Group — conducting comprehensive due diligence across corporate structures, asset registers, regulatory positions, IP portfolios, and labour exposures. Negotiated share-purchase, shareholders, and transitional-services agreements; managed amendment of articles of association in compliance with Egyptian securities laws.</p>
+      <div class="tags"><span class="tag gold">Cross-Border M&amp;A</span><span class="tag">FMCG</span><span class="tag">Egypt / Yemen</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Notable Matters &middot; III</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 08 TRACK RECORD ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Professional Track Record</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">08</div>
+      <div>
+        <div class="sec-title">Eight years across<br><em>four</em> jurisdictions.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.2em;">Foundational Engagements Shaping the Firm&rsquo;s Distinctive Approach</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="tl">
+      <div class="row">
+        <div class="when">Apr 2024 — Present<span class="geo">Egypt &middot; UAE &middot; Oman &middot; KSA</span></div>
+        <div>
+          <div class="role">Regional Legal Counsel</div>
+          <div class="org">Hassan Allam Holding &middot; Kortech</div>
+          <ul>
+            <li><b>Strategic Project Structuring</b> — Negotiated &amp; executed Design &amp; Build Railway Systems and Integration contracts for Hafeet Rail, materially reducing JV risk through enhanced indemnity and performance-security provisions.</li>
+            <li><b>Saudi Giga-Project Mandates</b> — Led EPC &amp; works contracts for AMAALA Triple Bay (Marina Hotel &amp; Medical Wellness Resort), Tadawul Tower / KAFD enhancement packages, the New Diriyah Museum, and the Zoomlion &times; NAMAA heavy-equipment arrangement.</li>
+            <li><b>Cross-Border Regulatory Compliance</b> — Advises executive management across UAE, Oman, KSA &amp; Egypt; harmonises legal provisions for seamless contract execution.</li>
+            <li><b>Corporate Governance &amp; M&amp;A</b> — Spearheaded due diligence and governance structuring for five offshore entities, including Hassan Allam Electromechanical Kortech Saudi.</li>
+            <li><b>Dispute Avoidance &amp; Resolution</b> — Develops and administers FIDIC early-warning and dispute-avoidance mechanisms; manages arbitration, litigation, and claims processes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sep 2023 — Feb 2024<span class="geo">Muscat, Oman</span></div>
+        <div>
+          <div class="role">Legal Counsel &amp; Corporate Lawyer</div>
+          <div class="org">Dr. Ahmed Said Al Jahwari &amp; Partner Law Firm</div>
+          <ul>
+            <li><b>FDI &amp; Market Entry</b> — Guided multinationals through Omani investment projects from regulatory assessment to operational implementation.</li>
+            <li><b>Seconded In-House Counsel</b> — Acted as dedicated legal counsel for contracted Omani companies — daily legal affairs, compliance, and corporate projects.</li>
+            <li><b>M&amp;A &amp; Regulatory Navigation</b> — Reviewed merger agreements; advised a FinTech startup on emerging digital-finance regulations.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="when">Jan 2023 — May 2024<span class="geo">Milan, Italy (Remote)</span></div>
+        <div>
+          <div class="role">Legal Researcher &amp; Journalist</div>
+          <div class="org">LC Publishing Group S.p.A.</div>
+          <ul>
+            <li><b>Legal Market Intelligence</b> — In-depth MENA legal-market research, analysing regulatory changes and corporate-compliance trends.</li>
+            <li><b>Strategic Publications</b> — Authored authoritative articles for <em>IBERIAN LAWYER</em> and <em>Legalcommunity MENA</em>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="when">Jan 2022 — Jan 2023<span class="geo">Egypt</span></div>
+        <div>
+          <div class="role">Corporate Lawyer &amp; Compliance Officer</div>
+          <div class="org">ARMA Group</div>
+          <ul>
+            <li><b>M&amp;A &amp; Restructuring</b> — Orchestrated M&amp;A procedures between Arma Egypt and the Yemeni HSA Group with rigorous due diligence.</li>
+            <li><b>Governance, Compliance &amp; IP</b> — Advised on AML, financial disclosure &amp; ethics; managed IP portfolio and share transfers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="when">Jan 2020 — Jan 2022<span class="geo">Egypt</span></div>
+        <div>
+          <div class="role">Lawyer &amp; Legal Affairs</div>
+          <div class="org">REDCON Construction Co. S.A.E.</div>
+          <ul>
+            <li><b>Construction Contract Management</b> — Drafted &amp; negotiated high-value construction contracts, RFPs, and subcontractor agreements.</li>
+            <li><b>Litigation &amp; Executive Reporting</b> — Managed civil and criminal litigation portfolio; prepared quarterly reports for top management.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sep 2017 — Jan 2020<span class="geo">Egypt</span></div>
+        <div>
+          <div class="role">Lawyer</div>
+          <div class="org">El Mahmal Group</div>
+          <ul>
+            <li><b>Litigation &amp; Enforcement</b> — Resolved post-judgment settlements and executed default-judgment orders.</li>
+            <li><b>Legal Drafting &amp; Advocacy</b> — Produced pleadings, appeals, and commercial contracts; represented clients in court.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Professional Track Record</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 09 EDUCATION + 10 CERTS ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Education &amp; Credentials</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">09</div>
+      <div>
+        <div class="sec-title">Common-law fluency,<br><em>civil-law</em> foundation.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.2em;">Academic Credentials Across Egypt, the UK &amp; the United States</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16mm;">
+      <div class="edu">
+        <div class="e"><h4>Master of Laws (LL.M.)</h4><div class="inst">Ain Shams University</div><p>International Trade Law &amp; Private Law</p><div class="yr">2017 — 2019</div></div>
+        <div class="e"><h4>Bachelor of Laws (LL.B.)</h4><div class="inst">Cairo University</div><p>Faculty of Law</p><div class="yr">2013 — 2017</div></div>
+        <div class="e"><h4>Diploma — Drafting Commercial Contracts</h4><div class="inst">Cambridge Law Studio / TOLES</div><p>Warranties &middot; Indemnities &middot; Consequences of Breach &middot; UK Law</p><div class="yr">2024 — 2025</div></div>
+        <div class="e"><h4>Diploma — Legal &amp; UN Translation</h4><div class="inst">The American University in Cairo</div><p>Professional translation of legal &amp; scientific documents</p><div class="yr">2022 — 2023</div></div>
+        <div class="e"><h4>Coursework — Corporate &amp; Commercial Law</h4><div class="inst">University of Illinois Urbana-Champaign</div><p>Contracts &middot; Employment &middot; Agency &middot; Business Regulation</p><div class="yr">2022 — 2024</div></div>
+      </div>
+
+      <div>
+        <div class="label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.24em;margin-bottom:8pt;">10 &middot; Licences, Certifications &amp; Affiliations</div>
+        <div class="certs">
+          <div class="cert"><h4>Associate, Chartered Institute of Arbitrators</h4><div class="meta">CIArb &middot; London &middot; Jan 2024</div><p>Chartered status in international arbitration.</p></div>
+          <div class="cert"><h4>FIDIC CLAC 050 — Dispute Boards &amp; Arbitration</h4><div class="meta">FIDIC &middot; Aug 2024</div><p>ADR &middot; DAB / DRB / CDB &middot; tribunals &amp; awards.</p></div>
+          <div class="cert"><h4>English Law Drafting Commercial Contracts</h4><div class="meta">TOLES / Cambridge &middot; Cert. 10986 &middot; Mar 2025</div><p>Warranties, indemnities &amp; consequences of breach.</p></div>
+          <div class="cert"><h4>FIDIC — Nature-Positive &amp; Anti-Fraud Playbook</h4><div class="meta">FIDIC &middot; 2025</div><p>Sustainable Infrastructure &middot; Anti-Corruption.</p></div>
+          <div class="cert"><h4>LCIA YIAG Regional Arbitrator Rep. — Middle East</h4><div class="meta">LCIA &middot; London &middot; Current</div><p>Young arbitration practitioners network.</p></div>
+          <div class="cert"><h4>Egyptian Bar Association — Court of Appeal</h4><div class="meta">Active &middot; Licence No. 607306</div><p>Full rights of audience.</p></div>
+          <div class="cert"><h4>Contributing Author — Lexis&reg; Middle East</h4><div class="meta">LexisNexis Middle East &middot; Active</div><p>Authoritative MENA legal publishing.</p></div>
+          <div class="cert"><h4>MENA Legal Network &middot; UK Internship</h4><div class="meta">Contributing Member &middot; Bright People &middot; 2020</div><p>Cross-border network &amp; UK commercial-law immersion.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Education &middot; Licences &amp; Affiliations</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 11 CORE COMPETENCIES ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Core Competencies</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">11</div>
+      <div>
+        <div class="sec-title">Technical capabilities &amp;<br><em>advisory</em> disciplines.</div>
+        <div class="sec-sub label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.2em;">Built Across In-House, Advisory &amp; Academic Roles in Four Jurisdictions</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="comp">
+      <div class="col">
+        <h4>Legal &amp; Corporate Expertise</h4>
+        <ul>
+          <li>International Corporate Law</li>
+          <li>Construction &amp; Infrastructure Law</li>
+          <li>Corporate Governance</li>
+          <li>M&amp;A &amp; Legal Due Diligence</li>
+          <li>Cross-Border Regulatory Compliance</li>
+          <li>Intellectual Property Management</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Contracts &amp; Commercial Operations</h4>
+        <ul>
+          <li>FIDIC Contracts (Red / Yellow / Silver)</li>
+          <li>EPC &amp; Design-and-Build Agreements</li>
+          <li>Contract Drafting &amp; Negotiation</li>
+          <li>Commercial &amp; Deal Structuring</li>
+          <li>Joint Ventures &amp; Shareholders Agreements</li>
+          <li>Letters of Award &amp; Subcontracts</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Dispute &amp; Risk Management</h4>
+        <ul>
+          <li>International Arbitration (ICC / LCIA)</li>
+          <li>FIDIC Dispute Avoidance &amp; Adjudication</li>
+          <li>Litigation &amp; Claims Management</li>
+          <li>Alternative Dispute Resolution (ADR)</li>
+          <li>Legal Risk Assessment</li>
+          <li>Settlement &amp; Variation Negotiation</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Jurisdictions &amp; Languages</h4>
+        <ul>
+          <li>Egypt — Civil &amp; Commercial Law</li>
+          <li>UAE — Federal &amp; Free-Zone</li>
+          <li>Sultanate of Oman — Commercial Law</li>
+          <li>Kingdom of Saudi Arabia — Commercial Regs</li>
+          <li>Working Languages: Arabic &middot; English</li>
+          <li>Legal Translation: Arabic &rlm;&harr;&lrm; English</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Core Competencies</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ 12 WHY US ============================ -->
+<section class="page">
+  <div class="pad">
+    <div class="kicker">Why the Firm</div>
+    <div class="sec-head" style="margin-top:6pt;">
+      <div class="sec-no">12</div>
+      <div>
+        <div class="sec-title">Why Law &amp; Business Synergy.<br><em>Five</em> reasons clients choose us.</div>
+        <div class="sec-sub label" style="font-size:6.8pt;color:var(--gold-deep);letter-spacing:.18em;">Built Around the Gap Between What Mid-Market Clients Need &amp; What Institutional Firms Deliver</div>
+      </div>
+    </div>
+
+    <hr class="rule gold">
+
+    <div class="reasons">
+      <div class="reason"><div class="num"></div><div><h4>Senior counsel on every matter</h4><p>Engagements are led personally by the Principal — not delegated to junior associates. Clients receive the strategic judgment of a regional General Counsel without the cost structure of a major institutional firm.</p></div></div>
+      <div class="reason"><div class="num"></div><div><h4>Cross-border by default</h4><p>Multi-jurisdictional structuring is not an exception in our practice — it is the rule. We routinely harmonise contract terms, governance frameworks, and regulatory filings across the most economically active MENA jurisdictions.</p></div></div>
+      <div class="reason"><div class="num"></div><div><h4>Infrastructure &amp; FIDIC depth</h4><p>Few practices in the region combine front-end FIDIC drafting expertise with back-end dispute-board and arbitration experience. We protect clients on day one while building the evidentiary record that wins disputes on day one thousand.</p></div></div>
+      <div class="reason"><div class="num"></div><div><h4>Commercial pragmatism</h4><p>Years of in-house tenure inform every recommendation. Legal advice that ignores commercial timelines, capital constraints, and board dynamics is advice that does not get implemented. We deliver advice that does.</p></div></div>
+      <div class="reason"><div class="num"></div><div><h4>Transparent engagement terms</h4><p>Clear scopes, predictable fee structures, and direct lines of communication. Our engagements are designed for repeat partnership — not for billable-hour maximisation.</p></div></div>
+    </div>
+
+    <div class="label" style="font-size:7pt;color:var(--gold-deep);letter-spacing:.28em;margin-top:14pt;">By the Numbers</div>
+    <div class="numbers">
+      <div class="num-i"><div class="big">8<small>+</small></div><div class="cap">Years Cumulative Practice</div></div>
+      <div class="num-i"><div class="big">4</div><div class="cap">Core MENA Jurisdictions</div></div>
+      <div class="num-i"><div class="big">9</div><div class="cap">Landmark Matters</div></div>
+      <div class="num-i"><div class="big">12</div><div class="cap">Sectors Served at Depth</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Why Law &amp; Business Synergy</span><span class="dot">&#10022;</span><span>Company Profile &middot; 2026</span></div>
+</section>
+
+<!-- ============================ CONTACT / CLOSING ============================ -->
+<section class="page contact">
+  <div class="pad">
+    <div class="kicker" style="color:var(--gold);">Get in Touch</div>
+    <h2 style="margin-top:10pt;">Initial consultations are<br><em>complimentary</em> and confidential.</h2>
+    <p style="color:#bcc3cd; font-style:italic; margin-top:8pt; font-size:11.5pt;">Reach the firm&rsquo;s Principal directly &middot; one business-day response.</p>
+
+    <div class="cgrid">
+      <div class="ci"><div class="l">Direct Line</div><div class="v">Amr Reda Abdullatif<small>Founder &amp; Principal &middot; Regional Legal Counsel &middot; ACIArb</small></div></div>
+      <div class="ci"><div class="l">Email</div><div class="v">amr.reda.abdulatif@gmail.com</div></div>
+      <div class="ci"><div class="l">Phone</div><div class="v">+20 110 110 1284</div></div>
+      <div class="ci"><div class="l">LinkedIn</div><div class="v">linkedin.com/in/amrabdullatif1</div></div>
+      <div class="ci"><div class="l">Bar</div><div class="v">Egyptian Bar Association<small>Court of Appeal &middot; No. 607306</small></div></div>
+      <div class="ci"><div class="l">Office</div><div class="v" style="font-size:11pt;">Block 63, Villa 86, 5th Settlement,<br>New Cairo, Egypt</div></div>
+    </div>
+
+    <div class="close">
+      <div class="flourish" style="text-align:center; margin-bottom:8pt;">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>
+      <div class="cities2">Egypt &middot; United Arab Emirates &middot; Oman &middot; Saudi Arabia</div>
+      <div class="copy">&copy; 2026 &middot; Law &amp; Business Synergy &middot; All Rights Reserved.<br>This profile is provided for informational purposes only and does not constitute legal advice or create an attorney-client relationship. Past results do not guarantee similar outcomes.</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
