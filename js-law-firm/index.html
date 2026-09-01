@@ -195,6 +195,71 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
 .foot{border-top:1px solid rgba(201,168,94,.3);margin-top:3.5rem;padding-top:1.4rem;
   display:flex;flex-wrap:wrap;gap:.6rem 2rem;font-size:.75rem;color:#A9B8B1}
 
+/* ---------- exposure tool ---------- */
+.tool{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,24rem);gap:clamp(2rem,4vw,4rem);align-items:start}
+.qs{margin:0;padding:0;border:0;display:grid}
+.q{border:0;border-top:1px solid var(--stone);margin:0;padding:1.3rem 0;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;gap:.8rem 2rem;align-items:start}
+.q:last-of-type{border-bottom:1px solid var(--stone)}
+.q legend{padding:0;font-size:1rem;line-height:1.45;max-width:44ch;float:left}
+.q .hint{grid-column:1;font-size:.8125rem;color:var(--ink-soft);margin:.35rem 0 0;max-width:52ch}
+.yn{display:flex;gap:0;grid-column:2;grid-row:1;align-self:start}
+.yn label{position:relative;display:block}
+.yn input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.yn span{display:block;padding:.4rem 1.05rem;font-size:.875rem;border:1px solid var(--stone);
+  border-right-width:0;background:var(--paper);color:var(--ink-soft);cursor:pointer;white-space:nowrap}
+.yn label:last-child span{border-right-width:1px}
+.yn input:checked + span{background:var(--field);border-color:var(--field);color:var(--paper)}
+.yn input:focus-visible + span{outline:2px solid var(--brass-deep);outline-offset:2px;position:relative;z-index:1}
+.thresholds{grid-column:1/-1;margin:.9rem 0 0;padding:1.1rem 1.2rem;background:var(--paper);
+  border-left:2px solid var(--brass)}
+.thresholds[hidden]{display:none}
+.thresholds p{font-size:.8125rem;color:var(--ink-soft);margin:0 0 .9rem;max-width:54ch}
+.tfield{display:grid;grid-template-columns:minmax(0,1fr) 9rem;gap:.5rem 1rem;align-items:center;margin-bottom:.6rem}
+.tfield label{font-size:.875rem}
+.tfield input{font:inherit;font-size:.875rem;padding:.4rem .55rem;border:1px solid var(--stone);
+  background:var(--paper);color:var(--ink);width:100%}
+.tfield input:focus-visible{outline:2px solid var(--brass-deep);outline-offset:1px}
+.tverdict{font-size:.875rem;margin:.9rem 0 0;padding-top:.8rem;border-top:1px solid var(--stone)}
+.tverdict b{font-weight:600}
+
+.result{position:sticky;top:4rem;background:var(--field-deep);color:var(--paper);padding:1.6rem 1.5rem 1.5rem}
+.result h3{font-size:1.15rem;margin-bottom:.35rem}
+.result .rnote{font-size:.8125rem;color:#B9C8C0;margin:0 0 1.1rem}
+.result ol{list-style:none;margin:0;padding:0;display:grid;gap:.9rem}
+.result li{display:grid;grid-template-columns:2.1rem minmax(0,1fr);gap:.85rem;align-items:baseline}
+.result .rn{font-family:var(--display);font-size:1.4rem;color:var(--brass-light);line-height:1}
+.result .rt{font-size:.875rem;line-height:1.4}
+.result .ra{display:block;color:#B9C8C0;font-size:.8125rem;margin-top:.15rem}
+.result .rdeadline{margin:1.3rem 0 0;padding-top:1rem;border-top:1px solid rgba(201,168,94,.35);
+  font-size:.875rem;color:#DCE4DF}
+.result .rdeadline b{display:block;color:var(--brass-light);font-family:var(--display);
+  font-size:1.15rem;font-weight:400;margin-bottom:.25rem}
+.result .actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.btn{font:inherit;font-size:.8125rem;padding:.5rem .9rem;background:transparent;color:var(--paper);
+  border:1px solid rgba(201,168,94,.55);cursor:pointer}
+.btn:hover{border-color:var(--brass-light);color:var(--brass-light)}
+.btn:focus-visible{outline:2px solid var(--brass-light);outline-offset:2px}
+.result .empty{font-size:.875rem;color:#B9C8C0}
+.gatetools{display:flex;gap:1.2rem;align-items:center;margin-bottom:1.4rem}
+.linkbtn{font:inherit;font-size:.8125rem;background:none;border:0;padding:0;cursor:pointer;
+  color:var(--brass-light);border-bottom:1px solid rgba(201,168,94,.5)}
+.linkbtn:hover{border-bottom-color:var(--brass-light)}
+.linkbtn:focus-visible{outline:2px solid var(--brass-light);outline-offset:3px}
+.gatelink{grid-column:2;font-size:.75rem;color:#8FA49B;text-decoration:none;border-bottom:1px solid transparent}
+.gatelink:hover{color:var(--brass-light);border-bottom-color:var(--brass-light)}
+@media (max-width:56rem){
+  .tool{grid-template-columns:minmax(0,1fr)}
+  .result{position:static}
+  .q{grid-template-columns:minmax(0,1fr)}
+  .yn{grid-column:1;grid-row:auto}
+}
+@media print{
+  .tool{grid-template-columns:minmax(0,1fr)}
+  .result{position:static}
+  .actions,.gatetools{display:none}
+}
+
 @media (max-width:44rem){
   nav.bar{flex-wrap:nowrap;overflow-x:auto;gap:1.1rem;-webkit-overflow-scrolling:touch}
   nav.bar .mark{position:sticky;left:0;background:var(--paper);padding-right:.6rem}
@@ -255,6 +320,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
   <span class="mark">JS Law Firm</span>
   <a href="#position">Position</a>
   <a href="#gates">Entry sequence</a>
+  <a href="#exposure">Which apply to you</a>
   <a href="#counsel">Counsel</a>
   <a href="#german-desk">German Desk</a>
   <a href="#instructions">Instructions</a>
@@ -311,9 +377,13 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
     <p class="lede measure">Order matters more than speed. Gates 3 and 5 are the two that most often force a signed transaction to be reopened, because both bind before completion rather than after it. Open any gate for the failure mode.</p>
   </div>
 
+  <div class="gatetools">
+    <button type="button" class="linkbtn" id="expandall" aria-controls="gatelist">Open all six gates</button>
+  </div>
+
   <div class="gaterail" id="gatelist">
 
-    <article class="gate">
+    <article class="gate" id="gate-1">
       <button type="button" aria-expanded="false" aria-controls="g1">
         <span class="num">01<i>Vehicle</i></span>
         <span>
@@ -330,7 +400,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
-    <article class="gate">
+    <article class="gate" id="gate-2">
       <button type="button" aria-expanded="false" aria-controls="g2">
         <span class="num">02<i>Sector</i></span>
         <span>
@@ -347,7 +417,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
-    <article class="gate">
+    <article class="gate" id="gate-3">
       <button type="button" aria-expanded="false" aria-controls="g3">
         <span class="num">03<i>Merger control</i></span>
         <span>
@@ -366,7 +436,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
-    <article class="gate">
+    <article class="gate" id="gate-4">
       <button type="button" aria-expanded="false" aria-controls="g4">
         <span class="num">04<i>Workforce</i></span>
         <span>
@@ -384,7 +454,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
-    <article class="gate">
+    <article class="gate" id="gate-5">
       <button type="button" aria-expanded="false" aria-controls="g5">
         <span class="num">05<i>Data</i></span>
         <span>
@@ -402,7 +472,7 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
-    <article class="gate">
+    <article class="gate" id="gate-6">
       <button type="button" aria-expanded="false" aria-controls="g6">
         <span class="num">06<i>Transfers</i></span>
         <span>
@@ -419,6 +489,105 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
       </div>
     </article>
 
+  </div>
+ </div>
+</section>
+
+<!-- 3b. WHICH GATES APPLY TO YOU -->
+<section class="section stone" id="exposure">
+ <div class="wrap">
+  <div class="shead">
+    <p class="kicker">Which gates apply to you</p>
+    <h2>Six questions. The answer is a list you can put in front of your board.</h2>
+    <p class="lede measure">This applies the instruments named above to the facts you enter. It runs in your browser and sends nothing anywhere. It is a checklist against published thresholds, not advice on your transaction.</p>
+  </div>
+
+  <div class="tool">
+    <form class="qs" id="qs" novalidate>
+      <fieldset class="q">
+        <legend>Are you establishing or acquiring a legal presence in Egypt?</legend>
+        <p class="hint">A company, branch, representative office, or the shares of an existing Egyptian entity.</p>
+        <div class="yn">
+          <label><input type="radio" name="q1" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q1" value="no" checked><span>No</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Does your activity need a sector authorisation?</legend>
+        <p class="hint">Medicines and medical devices (Egyptian Drug Authority); financial activities (Financial Regulatory Authority); other regulated sectors.</p>
+        <div class="yn">
+          <label><input type="radio" name="q2" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q2" value="no" checked><span>No</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Is there a transaction — an acquisition, merger or joint venture?</legend>
+        <p class="hint">Merger control under Law 3/2005 as amended has been suspensory since 1 June 2024: qualifying transactions are cleared before closing.</p>
+        <div class="yn">
+          <label><input type="radio" name="q3" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q3" value="no" checked><span>No</span></label>
+        </div>
+        <div class="thresholds" id="thresholds" hidden>
+          <p>Enter the figures for the transaction as a whole, in EGP millions. The tests below are the ones stated in gate 3; the arithmetic is applied exactly as written, with no interpretation of how turnover or assets are calculated.</p>
+          <div class="tfield">
+            <label for="t-eg">Combined Egyptian turnover or assets</label>
+            <input type="number" id="t-eg" inputmode="numeric" min="0" step="1" placeholder="EGP m">
+          </div>
+          <div class="tfield">
+            <label for="t-ww">Combined worldwide turnover or assets</label>
+            <input type="number" id="t-ww" inputmode="numeric" min="0" step="1" placeholder="EGP m">
+          </div>
+          <div class="tfield">
+            <label for="t-two">Do at least two parties each exceed EGP 200 million in Egypt?</label>
+            <div class="yn" style="grid-column:2">
+              <label><input type="radio" name="q3b" value="yes" id="t-two"><span>Yes</span></label>
+              <label><input type="radio" name="q3b" value="no" checked><span>No</span></label>
+            </div>
+          </div>
+          <p class="tverdict" id="tverdict">Enter figures to test them against the two thresholds.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Will you employ or second people in Egypt?</legend>
+        <p class="hint">Labour Law 14/2025 replaced Law 12/2003 in full on 1 September 2025.</p>
+        <div class="yn">
+          <label><input type="radio" name="q4" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q4" value="no" checked><span>No</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Will you process the personal data of people in Egypt?</legend>
+        <p class="hint">Customers, employees, patients or trial subjects. The law reaches controllers with no Egyptian entity.</p>
+        <div class="yn">
+          <label><input type="radio" name="q5" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q5" value="no" checked><span>No</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Will that data leave Egypt, or will you run electronic marketing or surveillance?</legend>
+        <p class="hint">Sending data to a parent or regional platform, campaigns run from outside Egypt, cameras on site — each is licensed separately.</p>
+        <div class="yn">
+          <label><input type="radio" name="q6" value="yes"><span>Yes</span></label>
+          <label><input type="radio" name="q6" value="no" checked><span>No</span></label>
+        </div>
+      </fieldset>
+    </form>
+
+    <aside class="result" id="result" aria-live="polite">
+      <h3>Your sequence</h3>
+      <p class="rnote" id="rnote">Answer the questions and the gates that apply will be listed here, in the order they bind.</p>
+      <ol id="rlist"></ol>
+      <div id="rdeadline"></div>
+      <div class="actions">
+        <button type="button" class="btn" id="copybtn">Copy as a memo</button>
+        <button type="button" class="btn" id="printbtn">Print this profile</button>
+      </div>
+    </aside>
   </div>
  </div>
 </section>
@@ -633,15 +802,192 @@ nav.bar a:hover{color:var(--ink);border-bottom-color:var(--brass)}
 
 <script>
 (function(){
-  // Gate accordions
-  document.querySelectorAll('.gate > button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var panel = document.getElementById(btn.getAttribute('aria-controls'));
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      panel.hidden = open;
+
+  // ---- gate helpers: open/close, open all, deep links ----
+  function setGate(btn, open){
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    btn.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+  }
+  var gateBtns = [].slice.call(document.querySelectorAll('.gate > button'));
+  var expandAll = document.getElementById('expandall');
+  function syncExpandLabel(){
+    if (!expandAll) return;
+    var allOpen = gateBtns.every(function(b){ return b.getAttribute('aria-expanded') === 'true'; });
+    expandAll.textContent = allOpen ? 'Close all six gates' : 'Open all six gates';
+  }
+  if (expandAll) {
+    expandAll.addEventListener('click', function(){
+      var allOpen = gateBtns.every(function(b){ return b.getAttribute('aria-expanded') === 'true'; });
+      gateBtns.forEach(function(b){ setGate(b, !allOpen); });
+      syncExpandLabel();
+    });
+  }
+  gateBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      setGate(b, b.getAttribute('aria-expanded') !== 'true');
+      syncExpandLabel();
     });
   });
+  // A colleague can be sent straight to one gate: .../#gate-3
+  (function openFromHash(){
+    var m = /^#gate-([1-6])$/.exec(window.location.hash || '');
+    if (!m) return;
+    var article = document.getElementById('gate-' + m[1]);
+    if (!article) return;
+    setGate(article.querySelector('button'), true);
+    syncExpandLabel();
+    article.scrollIntoView();
+  })();
+
+  // ---- exposure tool ----
+  var GATES = [
+    { n: '01', q: 'q1', t: 'Establish the vehicle and the investment licence',
+      a: 'GAFI — Investment Law 72/2017; Companies Law 159/1981' },
+    { n: '02', q: 'q2', t: 'Obtain the sector authorisation before you rely on it',
+      a: 'Sector regulator — EDA for medicines and devices; FRA for financial activities' },
+    { n: '03', q: 'q3', t: 'Clear merger control before closing, not after',
+      a: 'Egyptian Competition Authority — Law 3/2005 as amended by Law 175/2022; PM Decree 1120/2024' },
+    { n: '04', q: 'q4', t: 'Hire under the statute that is actually in force',
+      a: 'Labour Law 14/2025, in force 1 September 2025' },
+    { n: '05', q: 'q5', t: 'Register and licence your processing before 31 October 2026',
+      a: 'Personal Data Protection Centre — Law 151/2020; Decree 816 of 1 November 2025' },
+    { n: '06', q: 'q6', t: 'Licence each transfer, marketing and surveillance activity separately',
+      a: 'Personal Data Protection Centre — separate licences' }
+  ];
+  var form = document.getElementById('qs');
+  if (form) {
+    var thresholds = document.getElementById('thresholds');
+    var tverdict = document.getElementById('tverdict');
+    var rlist = document.getElementById('rlist');
+    var rnote = document.getElementById('rnote');
+    var rdeadline = document.getElementById('rdeadline');
+    var lastMemo = '';
+
+    function answered(name){
+      var el = form.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value === 'yes' : false;
+    }
+    function num(id){
+      var v = parseFloat((document.getElementById(id).value || '').replace(/,/g, ''));
+      return isFinite(v) ? v : null;
+    }
+    function mergerVerdict(){
+      var eg = num('t-eg'), ww = num('t-ww');
+      var two = form.querySelector('input[name="q3b"]:checked');
+      var twoYes = two ? two.value === 'yes' : false;
+      if (eg === null && ww === null) {
+        return { state: 'unknown',
+                 text: 'Enter figures to test them against the two thresholds.' };
+      }
+      var domestic = eg !== null && eg >= 900 && twoYes;
+      var global = ww !== null && ww >= 7500;
+      if (domestic || global) {
+        var which = domestic && global ? 'Both tests are' : (domestic ? 'The domestic test is' : 'The global test is');
+        return { state: 'met',
+                 text: which + ' met on the figures entered. A suspensory filing to the Egyptian Competition Authority is engaged before closing.' };
+      }
+      var why = [];
+      if (eg !== null && eg < 900) why.push('combined Egyptian figures are below EGP 900 million');
+      if (eg !== null && eg >= 900 && !twoYes) why.push('the two-party EGP 200 million limb is not met');
+      if (ww !== null && ww < 7500) why.push('combined worldwide figures are below EGP 7.5 billion');
+      return { state: 'not-met',
+               text: 'Neither test is met on the figures entered' + (why.length ? ' — ' + why.join('; ') : '') +
+                     '. The basis on which turnover and assets are calculated decides this, and is worth confirming before you rely on it.' };
+    }
+    function daysToDeadline(){
+      var deadline = Date.UTC(2026, 9, 31);
+      var now = new Date();
+      var today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      return Math.round((deadline - today) / 86400000);
+    }
+
+    function render(){
+      var txYes = answered('q3');
+      thresholds.hidden = !txYes;
+      var v = mergerVerdict();
+      if (txYes) {
+        tverdict.innerHTML = (v.state === 'met' ? '<b>Filing engaged.</b> ' :
+                              v.state === 'not-met' ? '<b>Below the stated thresholds.</b> ' : '') + v.text;
+      }
+
+      var applies = GATES.filter(function(g){ return answered(g.q); });
+      rlist.innerHTML = '';
+      if (!applies.length) {
+        rnote.textContent = 'Answer the questions and the gates that apply will be listed here, in the order they bind.';
+        rdeadline.innerHTML = '';
+        lastMemo = '';
+        return;
+      }
+      rnote.textContent = applies.length === 1
+        ? 'One gate applies on the answers given. It is listed in sequence order.'
+        : applies.length + ' gates apply on the answers given, in the order they bind.';
+
+      applies.forEach(function(g){
+        var li = document.createElement('li');
+        var extra = '';
+        if (g.q === 'q3' && v.state !== 'unknown') {
+          extra = ' <span class="ra">' + (v.state === 'met'
+            ? 'Thresholds met on the figures entered — filing before closing.'
+            : 'Below the stated thresholds on the figures entered.') + '</span>';
+        }
+        li.innerHTML = '<span class="rn">' + g.n + '</span>' +
+                       '<span class="rt">' + g.t + '<span class="ra">' + g.a + '</span>' + extra + '</span>';
+        rlist.appendChild(li);
+      });
+
+      var dataGates = answered('q5') || answered('q6');
+      if (dataGates) {
+        var d = daysToDeadline();
+        var when = d > 0 ? d + (d === 1 ? ' day' : ' days') + ' from today'
+                 : d === 0 ? 'today' : 'passed';
+        rdeadline.innerHTML = '<p class="rdeadline"><b>31 October 2026</b>The PDPL grace period ends — ' + when +
+          '. Licensing through the Personal Data Protection Centre is a condition of processing after that date.</p>';
+      } else {
+        rdeadline.innerHTML = '';
+      }
+
+      // plain-text memo, written to be pasted into an internal email
+      var lines = ['Egyptian entry — gates that apply, on the facts entered',
+                   'Prepared from the JS Law Firm profile; regulatory position verified 31 August 2026.', ''];
+      applies.forEach(function(g){ lines.push(g.n + '  ' + g.t); lines.push('     ' + g.a); });
+      if (answered('q3')) { lines.push(''); lines.push('Merger control: ' + v.text); }
+      if (dataGates) {
+        lines.push('');
+        lines.push('Nearest binding date: 31 October 2026 — the PDPL grace period ends.');
+      }
+      lines.push('');
+      lines.push('This is a checklist against published instruments, not advice on a specific transaction.');
+      lines.push('JS Law Firm, 4 Mohamed Taymour Street, Nozha, Cairo. +20 2 2775 0550. contact@jsaadlawfirm.com');
+      lastMemo = lines.join('\n');
+    }
+
+    form.addEventListener('change', render);
+    form.addEventListener('input', render);
+    render();
+
+    var copybtn = document.getElementById('copybtn');
+    copybtn.addEventListener('click', function(){
+      var text = lastMemo || 'No gates apply on the answers given.';
+      var done = function(){
+        var was = copybtn.textContent;
+        copybtn.textContent = 'Copied';
+        setTimeout(function(){ copybtn.textContent = was; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+      } else { fallback(text, done); }
+    });
+    function fallback(text, done){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { /* nothing to do */ }
+      document.body.removeChild(ta);
+    }
+    document.getElementById('printbtn').addEventListener('click', function(){ window.print(); });
+  }
 
   // Days remaining to the PDPL grace deadline, computed from today.
   var el = document.getElementById('countdown');

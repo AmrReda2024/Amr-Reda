@@ -97,6 +97,26 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
 .gate .fail b{display:block;color:var(--brass-light);font-weight:400;font-size:9pt;margin-bottom:1.2mm}
 .railnote{font-size:9pt;color:#B9C8C0;margin-top:5mm}
 
+
+/* worksheet */
+.ws{list-style:none;margin:0;padding:0}
+.ws li{display:grid;grid-template-columns:1fr 30mm;gap:4mm;align-items:start;
+  padding:3.2mm 0;border-top:.4pt solid var(--stone)}
+.ws li:last-child{border-bottom:.4pt solid var(--stone)}
+.ws .qn{font-size:10pt;line-height:1.3;margin:0 0 1mm}
+.ws .hint{font-size:9pt;line-height:1.35;color:var(--ink-soft);margin:0;max-width:66ch}
+.ws .gate-ref{font-size:9pt;color:var(--brass-deep);white-space:nowrap;flex-basis:100%;text-align:right}
+.boxes{display:flex;flex-wrap:wrap;gap:2mm 4mm;justify-content:flex-end;padding-top:1mm}
+.boxes span{display:flex;align-items:center;gap:1.5mm;font-size:9pt;color:var(--ink-soft)}
+.boxes i{display:block;width:4.5mm;height:4.5mm;border:.6pt solid var(--ink-soft);font-style:normal}
+.calc{margin-top:5mm;border-top:1.2pt solid var(--brass);padding-top:4mm;
+  display:grid;grid-template-columns:1fr 1fr;gap:6mm 10mm}
+.calc h3{font-size:11pt;margin-bottom:2.5mm}
+.calc p{font-size:9pt;line-height:1.4;color:var(--ink-soft);margin:0 0 2mm;max-width:52ch}
+.calcline{display:grid;grid-template-columns:1fr 32mm;gap:4mm;align-items:end;margin-bottom:2.6mm;font-size:9.5pt}
+.calcline .rule{border-bottom:.6pt solid var(--ink-soft);height:5mm}
+.wsnote{font-size:9pt;color:var(--ink-soft);margin-top:6mm;border-top:.4pt solid var(--stone);padding-top:3mm;max-width:80ch}
+
 /* counsel */
 .counsel{display:grid;grid-template-columns:58mm 1fr;gap:10mm;align-items:start}
 .counsel img{width:100%;height:auto;display:block;filter:grayscale(1) contrast(1.12) brightness(1.02);
@@ -263,7 +283,80 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 5 — COUNSEL -->
+<!-- PAGE 5 — WORKSHEET -->
+<section class="page spread">
+  <div class="safe">
+    <div>
+    <p class="kicker">Which gates apply to you</p>
+    <h2 class="title" style="font-size:19pt;margin-bottom:3.5mm">Six questions. The answer is a list you can put in front of your board.</h2>
+    <p class="lede" style="font-size:10pt;margin-bottom:4mm">Tick as you read: each yes turns on the gate named beside it. The interactive profile computes the same result, merger-control arithmetic included.</p>
+
+    <ul class="ws">
+      <li>
+        <div>
+          <p class="qn">Are you establishing or acquiring a legal presence in Egypt?</p>
+          <p class="hint">A company, branch, representative office, or the shares of an existing Egyptian entity.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 01</span></div>
+      </li>
+      <li>
+        <div>
+          <p class="qn">Does your activity need a sector authorisation?</p>
+          <p class="hint">Medicines and medical devices (Egyptian Drug Authority); financial activities (Financial Regulatory Authority); other regulated sectors.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 02</span></div>
+      </li>
+      <li>
+        <div>
+          <p class="qn">Is there a transaction — an acquisition, merger or joint venture?</p>
+          <p class="hint">Suspensory since 1 June 2024: qualifying transactions are cleared before closing. Test the figures below.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 03</span></div>
+      </li>
+      <li>
+        <div>
+          <p class="qn">Will you employ or second people in Egypt?</p>
+          <p class="hint">Labour Law 14/2025 replaced Law 12/2003 in full on 1 September 2025.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 04</span></div>
+      </li>
+      <li>
+        <div>
+          <p class="qn">Will you process the personal data of people in Egypt?</p>
+          <p class="hint">Customers, employees, patients or trial subjects — including controllers with no Egyptian entity. Grace period ends 31 October 2026.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 05</span></div>
+      </li>
+      <li>
+        <div>
+          <p class="qn">Will that data leave Egypt, or will you run electronic marketing or surveillance?</p>
+          <p class="hint">Transfers to a parent or regional platform, campaigns run from outside Egypt, cameras on site — each licensed separately.</p>
+        </div>
+        <div class="boxes"><span><i></i>Yes</span><span><i></i>No</span><span class="gate-ref">Yes → Gate 06</span></div>
+      </li>
+    </ul>
+
+    <div class="calc">
+      <div>
+        <h3>Domestic test</h3>
+        <p>Met where combined Egyptian turnover or assets exceed EGP 900 million and at least two parties each exceed EGP 200 million.</p>
+        <div class="calcline"><span>Combined Egyptian turnover or assets (EGP m)</span><span class="rule"></span></div>
+        <div class="calcline"><span>Two parties each above EGP 200 million?</span><span class="rule"></span></div>
+      </div>
+      <div>
+        <h3>Global test</h3>
+        <p>Met where combined worldwide turnover or assets exceed EGP 7.5 billion. FRA-regulated activities follow a separate route.</p>
+        <div class="calcline"><span>Combined worldwide turnover or assets (EGP m)</span><span class="rule"></span></div>
+        <div class="calcline"><span>Either test met? Filing before closing</span><span class="rule"></span></div>
+      </div>
+    </div>
+    </div>
+
+    <p class="wsnote">This worksheet applies published instruments to the facts you enter. It is a checklist, not advice on a specific transaction, and the basis on which turnover and assets are calculated decides the merger-control answer.</p>
+  </div>
+</section>
+
+<!-- PAGE 6 — COUNSEL -->
 <section class="page">
   <div class="safe">
     <p class="kicker">Who does the work</p>
@@ -294,7 +387,7 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 6 — GERMAN DESK -->
+<!-- PAGE 7 — GERMAN DESK -->
 <section class="page dark">
   <div class="safe">
     <p class="kicker">German Desk</p>
@@ -317,7 +410,7 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 7 — INSTRUCTED ON -->
+<!-- PAGE 8 — INSTRUCTED ON -->
 <section class="page stone">
   <div class="safe">
     <p class="kicker">What we are instructed on</p>
@@ -335,7 +428,7 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 8 — SELECTED MATTERS -->
+<!-- PAGE 9 — SELECTED MATTERS -->
 <section class="page deep spread">
   <div class="safe">
     <div>
@@ -372,7 +465,7 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 9 — ENGAGEMENT -->
+<!-- PAGE 10 — ENGAGEMENT -->
 <section class="page spread">
   <div class="safe">
     <div>
@@ -407,7 +500,7 @@ h2.title{font-size:22pt;line-height:1.14;max-width:24ch;margin-bottom:5mm}
   </div>
 </section>
 
-<!-- PAGE 10 — CONTACT -->
+<!-- PAGE 11 — CONTACT -->
 <section class="page dark contact spread">
   <div class="safe">
     <div>
