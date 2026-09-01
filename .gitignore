@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# local build output
+js-law-firm/preview.html
+js-law-firm/node_modules/
