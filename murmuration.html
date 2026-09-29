@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Murmuration</title>
+<style>
+  :root {
+    --ink: #f6e9dc;
+    --ink-dim: rgba(246, 233, 220, .62);
+    --panel: rgba(12, 8, 22, .55);
+    --line: rgba(246, 233, 220, .18);
+    --accent: #ffb56b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #0b1030; overflow: hidden; }
+  body {
+    font: 13px/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    -webkit-user-select: none; user-select: none;
+  }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+
+  .title {
+    position: fixed; top: max(18px, env(safe-area-inset-top)); left: 20px; pointer-events: none;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, .35);
+  }
+  .title h1 { margin: 0; font: 400 20px/1.1 Georgia, "Times New Roman", serif; letter-spacing: .14em; text-transform: uppercase; }
+  .title p { margin: 6px 0 0; color: var(--ink-dim); font-size: 12px; letter-spacing: .04em; }
+
+  .panel {
+    position: fixed; left: 16px; bottom: max(16px, env(safe-area-inset-bottom));
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    width: 216px; overflow: hidden;
+  }
+  .panel summary {
+    list-style: none; cursor: pointer; padding: 10px 14px; letter-spacing: .12em; text-transform: uppercase;
+    font-size: 11px; color: var(--ink-dim); display: flex; justify-content: space-between; align-items: center;
+  }
+  .panel summary::-webkit-details-marker { display: none; }
+  .panel summary::after { content: "+"; font-size: 15px; }
+  .panel[open] summary::after { content: "–"; }
+  .panel .body { padding: 2px 14px 14px; display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 8px; font-size: 12px; }
+  .row output { color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .row input { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); margin: 0; }
+  .btns { display: flex; gap: 8px; margin-top: 2px; }
+  button {
+    flex: 1; font: inherit; color: var(--ink); background: rgba(255, 255, 255, .08);
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; cursor: pointer;
+  }
+  button:hover { background: rgba(255, 255, 255, .16); }
+  button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (max-width: 520px) {
+    .title h1 { font-size: 16px; }
+    .panel { width: calc(100% - 32px); }
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-label="A murmuration of 400 starlings wheeling across a dusk sky" role="img"></canvas>
+
+<div class="title">
+  <h1>Murmuration</h1>
+  <p>400 starlings · move the pointer to send in a falcon</p>
+</div>
+
+<details class="panel" id="panel">
+  <summary>Tune the flock</summary>
+  <div class="body">
+    <label class="row">Cohesion<output></output><input data-k="cohesion" type="range" min="0" max="2" step="0.05" value="1"></label>
+    <label class="row">Alignment<output></output><input data-k="alignment" type="range" min="0" max="3" step="0.05" value="1.3"></label>
+    <label class="row">Separation<output></output><input data-k="separation" type="range" min="0" max="3" step="0.05" value="1.2"></label>
+    <label class="row">Speed<output></output><input data-k="speed" type="range" min="0.4" max="2" step="0.05" value="1"></label>
+    <div class="btns">
+      <button id="strike" type="button">Falcon strike</button>
+      <button id="pause" type="button">Pause</button>
+    </div>
+  </div>
+</details>
+
+<script>
+(() => {
+  'use strict';
+
+  const N = 400;
+  const canvas = document.getElementById('sky');
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  // ---- tunables (bound to the sliders) ------------------------------------
+  const P = { cohesion: 1, alignment: 1.3, separation: 1.2, speed: 1 };
+  document.querySelectorAll('input[data-k]').forEach(el => {
+    const out = el.parentElement.querySelector('output');
+    const sync = () => { P[el.dataset.k] = +el.value; out.textContent = (+el.value).toFixed(2); };
+    el.addEventListener('input', sync); sync();
+  });
+
+  // ---- world --------------------------------------------------------------
+  const BOX = { x: 260, y: 110, z: 150 };       // half-extents the roost path wanders in
+  const NEIGHBOUR_R = 50, SEP_R = 11;
+  const NR2 = NEIGHBOUR_R * NEIGHBOUR_R, SR2 = SEP_R * SEP_R;
+  const VMIN = 95, VMAX = 175;
+  const CAM_D = 560;
+
+  const px = new Float32Array(N), py = new Float32Array(N), pz = new Float32Array(N);
+  const vx = new Float32Array(N), vy = new Float32Array(N), vz = new Float32Array(N);
+  const ax = new Float32Array(N), ay = new Float32Array(N), az = new Float32Array(N);
+  const phase = new Float32Array(N), flapRate = new Float32Array(N);
+  const sx = new Float32Array(N), sy = new Float32Array(N), hx = new Float32Array(N), hy = new Float32Array(N), sc = new Float32Array(N);
+
+  // Seed: a loose ellipsoid, everyone heading roughly the same way
+  for (let i = 0; i < N; i++) {
+    const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2, r = Math.cbrt(Math.random());
+    const s = Math.sqrt(1 - u * u);
+    px[i] = r * s * Math.cos(th) * 120 - 200; py[i] = r * u * 60; pz[i] = r * s * Math.sin(th) * 90;
+    const a = (Math.random() - 0.5) * 0.8;
+    vx[i] = Math.cos(a) * 130; vy[i] = Math.sin(a) * 40; vz[i] = (Math.random() - 0.5) * 40;
+    phase[i] = Math.random() * Math.PI * 2;
+    flapRate[i] = 11 + Math.random() * 5;
+  }
+
+  // Falcon: patrols off-screen, dives now and then, or follows the pointer.
+  const falcon = { x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, mode: 'away', t: 0, next: 9 };
+  const pointer = { on: false, x: 0, y: 0, seen: -99 };
+  const FALCON_R = 120;
+
+  // ---- view ---------------------------------------------------------------
+  let W = 0, H = 0, DPR = 1, K = 1, CX = 0, CY = 0;
+  let bg = null;                                  // pre-rendered sky + hills
+
+  function rand(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+  function buildBackground() {
+    bg = document.createElement('canvas');
+    bg.width = canvas.width; bg.height = canvas.height;
+    const g = bg.getContext('2d');
+    g.scale(DPR, DPR);
+
+    const sky = g.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0.00, '#080c26');
+    sky.addColorStop(0.28, '#26275a');
+    sky.addColorStop(0.52, '#8c3f7a');
+    sky.addColorStop(0.72, '#e5735c');
+    sky.addColorStop(0.86, '#ffb26a');
+    sky.addColorStop(1.00, '#ffd79a');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+
+    const sunX = W * 0.7, sunY = H * 0.84, sunR = Math.max(W, H) * 0.55;
+    const glow = g.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR);
+    glow.addColorStop(0, 'rgba(255,236,190,.95)');
+    glow.addColorStop(0.08, 'rgba(255,205,140,.7)');
+    glow.addColorStop(0.35, 'rgba(255,150,110,.22)');
+    glow.addColorStop(1, 'rgba(255,120,100,0)');
+    g.fillStyle = glow; g.fillRect(0, 0, W, H);
+
+    // thin cloud bands
+    const rnd = rand(7);
+    for (let i = 0; i < 9; i++) {
+      const y = H * (0.42 + rnd() * 0.36), x = rnd() * W, w = W * (0.25 + rnd() * 0.4), h = 4 + rnd() * 9;
+      const c = g.createLinearGradient(x - w / 2, 0, x + w / 2, 0);
+      c.addColorStop(0, 'rgba(90,40,90,0)'); c.addColorStop(0.5, 'rgba(90,40,90,.28)'); c.addColorStop(1, 'rgba(90,40,90,0)');
+      g.fillStyle = c; g.beginPath(); g.ellipse(x, y, w / 2, h, 0, 0, Math.PI * 2); g.fill();
+    }
+
+    // far and near hills
+    const hill = (base, amp, col, seed) => {
+      const r = rand(seed), a = r() * 6, b = r() * 6, c = r() * 6;
+      g.fillStyle = col; g.beginPath(); g.moveTo(0, H);
+      for (let x = 0; x <= W; x += 6) {
+        const t = x / W * 5;
+        g.lineTo(x, H * base - amp * H * (Math.sin(t + a) * 0.5 + Math.sin(t * 2.3 + b) * 0.3 + Math.sin(t * 5.1 + c) * 0.12));
+      }
+      g.lineTo(W, H); g.closePath(); g.fill();
+    };
+    hill(0.93, 0.045, '#3a1f3f', 11);
+    hill(0.965, 0.03, '#150d1e', 23);
+
+    // reeds along the foreground
+    const rr = rand(99);
+    g.strokeStyle = '#08050d'; g.lineCap = 'round';
+    for (let i = 0; i < W / 5; i++) {
+      const x = rr() * W, h = 14 + rr() * 46, lean = (rr() - 0.5) * 12;
+      g.lineWidth = 1 + rr() * 1.4;
+      g.beginPath(); g.moveTo(x, H + 2); g.quadraticCurveTo(x + lean * 0.3, H - h * 0.6, x + lean, H - h); g.stroke();
+    }
+    g.fillStyle = '#08050d'; g.fillRect(0, H - 4, W, 6);
+  }
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+    K = Math.min(Math.max(W / 520, H / 300), W / 240);   // keep the flock on narrow screens
+    CX = W * 0.5; CY = H * 0.4;
+    buildBackground();
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.drawImage(bg, 0, 0, W, H);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---- input --------------------------------------------------------------
+  const setPointer = (e) => { pointer.on = true; pointer.x = e.clientX; pointer.y = e.clientY; pointer.seen = clock; };
+  canvas.addEventListener('pointermove', setPointer);
+  canvas.addEventListener('pointerdown', setPointer);
+  canvas.addEventListener('pointerleave', () => { pointer.on = false; });
+  canvas.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') pointer.on = false; });
+  canvas.addEventListener('pointercancel', () => { pointer.on = false; });
+
+  let paused = false;
+  const pauseBtn = document.getElementById('pause');
+  pauseBtn.addEventListener('click', () => {
+    paused = !paused; pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    if (!paused) last = performance.now();
+  });
+  document.getElementById('strike').addEventListener('click', () => startDive());
+
+  // ---- camera helpers -----------------------------------------------------
+  let yaw = 0, cosY = 1, sinY = 0, panX = 0, panY = 0;   // the camera drifts after the flock
+  function project(x, y, z, out) {
+    const xw = x - panX, xr = xw * cosY - z * sinY, zr = xw * sinY + z * cosY;
+    const s = CAM_D / (CAM_D + zr);
+    out.x = CX + xr * K * s; out.y = CY + (y - panY) * K * s; out.s = s;
+  }
+  const tmp = { x: 0, y: 0, s: 1 }, tmp2 = { x: 0, y: 0, s: 1 };
+
+  // ---- falcon -------------------------------------------------------------
+  let cen = { x: 0, y: 0, z: 0 };
+  function startDive() {
+    const a = Math.random() * Math.PI * 2;
+    const dist = 520;
+    falcon.x = cen.x + Math.cos(a) * dist; falcon.y = cen.y - 200 - Math.random() * 60; falcon.z = cen.z + Math.sin(a) * dist * 0.6;
+    const dx = cen.x - falcon.x, dy = cen.y - falcon.y, dz = cen.z - falcon.z, d = Math.hypot(dx, dy, dz);
+    const sp = 460;
+    falcon.vx = dx / d * sp; falcon.vy = dy / d * sp; falcon.vz = dz / d * sp;
+    falcon.mode = 'dive'; falcon.t = 0;
+  }
+
+  function updateFalcon(dt, t) {
+    const live = pointer.on && t - pointer.seen < 2.5;
+    if (live) {
+      // Put the falcon on the pointer, at the flock's depth.
+      const zr = (cen.x - panX) * sinY + cen.z * cosY;
+      const s = CAM_D / (CAM_D + zr);
+      const xr = (pointer.x - CX) / (K * s), yv = (pointer.y - CY) / (K * s);
+      falcon.x = xr * cosY + zr * sinY + panX; falcon.z = -xr * sinY + zr * cosY; falcon.y = yv + panY;
+      falcon.mode = 'pointer';
+      return true;
+    }
+    if (falcon.mode === 'pointer') { falcon.mode = 'away'; falcon.next = t + 6; }
+    if (falcon.mode === 'dive') {
+      falcon.x += falcon.vx * dt; falcon.y += falcon.vy * dt; falcon.z += falcon.vz * dt;
+      falcon.t += dt;
+      if (falcon.t > 2.6) { falcon.mode = 'away'; falcon.next = t + 14 + Math.random() * 12; }
+      return true;
+    }
+    if (t > falcon.next) startDive();
+    return false;
+  }
+
+  // ---- simulation ---------------------------------------------------------
+  let clock = 0;
+  function step(dt) {
+    clock += dt;
+    const t = clock;
+
+    // centroid + mean velocity (used by the falcon and the roost pull)
+    let cxs = 0, cys = 0, czs = 0;
+    for (let i = 0; i < N; i++) { cxs += px[i]; cys += py[i]; czs += pz[i]; }
+    cen.x = cxs / N; cen.y = cys / N; cen.z = czs / N;
+
+    // The roost the flock is drawn towards wanders on a slow Lissajous curve;
+    // its speed swells and fades, which is what makes the shape fold and stretch.
+    const w = t * (0.16 + 0.05 * Math.sin(t * 0.07));
+    const Tx = BOX.x * 0.62 * Math.sin(w * 0.9), Ty = BOX.y * 0.6 * Math.sin(w * 1.37 + 1.3), Tz = BOX.z * 0.6 * Math.sin(w * 0.63 + 2.1);
+
+    const hunting = updateFalcon(dt, t);
+    const coh = P.cohesion * 0.9, ali = P.alignment * 3.4, sep = P.separation * 300;
+    const vmin = VMIN * P.speed, vmax = VMAX * P.speed;
+
+    for (let i = 0; i < N; i++) {
+      const xi = px[i], yi = py[i], zi = pz[i];
+      let cx = 0, cy = 0, cz = 0, avx = 0, avy = 0, avz = 0, spx = 0, spy = 0, spz = 0, n = 0;
+
+      for (let j = 0; j < N; j++) {
+        if (j === i) continue;
+        const dx = px[j] - xi, dy = py[j] - yi, dz = pz[j] - zi;
+        const d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 < NR2) {
+          n++; cx += dx; cy += dy; cz += dz;
+          avx += vx[j]; avy += vy[j]; avz += vz[j];
+          if (d2 < SR2) { const f = 1 - d2 / SR2; spx -= dx * f; spy -= dy * f; spz -= dz * f; }
+        }
+      }
+
+      let ex = 0, ey = 0, ez = 0;
+      if (n > 0) {
+        const inv = 1 / n;
+        ex += cx * inv * coh + (avx * inv - vx[i]) * ali * 0.5 + spx * sep * 0.02;
+        ey += cy * inv * coh + (avy * inv - vy[i]) * ali * 0.5 + spy * sep * 0.02;
+        ez += cz * inv * coh + (avz * inv - vz[i]) * ali * 0.5 + spz * sep * 0.02;
+      }
+
+      // pull to the roost: gentle when close, firmer when a straggler
+      const rx = Tx - xi, ry = Ty - yi, rz = Tz - zi;
+      const rd = Math.hypot(rx, ry, rz) + 1;
+      const pull = Math.min(Math.max((rd - 70) / 220, 0), 2);
+      ex += rx / rd * pull * 46; ey += ry / rd * pull * 46; ez += rz / rd * pull * 46;
+
+      // soft walls, mostly to keep the show on screen
+      const wall = (p, lim) => { const o = Math.abs(p) - lim; return o > 0 ? -Math.sign(p) * o * 4 : 0; };
+      ex += wall(xi, BOX.x); ey += wall(yi, BOX.y); ez += wall(zi, BOX.z);
+
+      // wander noise, so the flock never settles into a rut
+      ex += (Math.random() - 0.5) * 26; ey += (Math.random() - 0.5) * 20; ez += (Math.random() - 0.5) * 26;
+
+      // falcon
+      if (hunting) {
+        const fx = xi - falcon.x, fy = yi - falcon.y, fz = zi - falcon.z;
+        const fd2 = fx * fx + fy * fy + fz * fz;
+        if (fd2 < FALCON_R * FALCON_R * 2.2) {
+          const fd = Math.sqrt(fd2) + 0.01, k = Math.pow(Math.max(0, 1 - fd / (FALCON_R * 1.5)), 2) * 1500 / fd;
+          ex += fx * k; ey += fy * k; ez += fz * k;
+        }
+      }
+
+      const am = Math.hypot(ex, ey, ez), amax = 240 * P.speed;
+      const lim = am > amax ? amax / am : 1;
+      ax[i] = ex * lim; ay[i] = ey * lim; az[i] = ez * lim;
+    }
+
+    for (let i = 0; i < N; i++) {
+      let nvx = vx[i] + ax[i] * dt, nvy = vy[i] + ay[i] * dt, nvz = vz[i] + az[i] * dt;
+      nvy *= 1 - 0.35 * dt;                                    // birds prefer level flight
+      let sp = Math.hypot(nvx, nvy, nvz) || 1;
+      const clamped = Math.min(vmax, Math.max(vmin, sp));
+      const f = clamped / sp;
+      vx[i] = nvx * f; vy[i] = nvy * f; vz[i] = nvz * f;
+      px[i] += vx[i] * dt; py[i] += vy[i] * dt; pz[i] += vz[i] * dt;
+      phase[i] += flapRate[i] * dt * (0.8 + 0.4 * (clamped / vmax));
+    }
+  }
+
+  // ---- drawing ------------------------------------------------------------
+  const BUCKETS = [
+    { color: 'rgba(44, 20, 52, .85)', width: 0.9 },      // far
+    { color: 'rgba(20, 10, 26, .93)', width: 1.2 },     // mid
+    { color: 'rgba(6, 4, 10, 1)',     width: 1.5 },      // near
+  ];
+
+  function draw() {
+    // fading the sky back in leaves a faint wake behind each bird
+    ctx.globalAlpha = 0.55;
+    ctx.drawImage(bg, 0, 0, W, H);
+    ctx.globalAlpha = 1;
+
+    const unit = Math.max(0.7, Math.min(1.5, Math.min(W, H) / 700 + 0.35));
+    for (let i = 0; i < N; i++) {
+      project(px[i], py[i], pz[i], tmp);
+      project(px[i] + vx[i] * 0.06, py[i] + vy[i] * 0.06, pz[i] + vz[i] * 0.06, tmp2);
+      sx[i] = tmp.x; sy[i] = tmp.y; sc[i] = tmp.s;
+      const dx = tmp2.x - tmp.x, dy = tmp2.y - tmp.y, d = Math.hypot(dx, dy) || 1;
+      hx[i] = dx / d; hy[i] = dy / d;
+    }
+
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (let b = 0; b < 3; b++) {
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        const s = sc[i];
+        if ((s < 0.86 ? 0 : s < 1.16 ? 1 : 2) !== b) continue;
+        const size = 2.3 * unit * s;
+        const flap = Math.sin(phase[i]);
+        const spread = 0.5 + flap * 0.55;                     // opening of the wing "V"
+        const head = Math.atan2(hy[i], hx[i]);
+        const a1 = head + Math.PI - spread, a2 = head + Math.PI + spread;
+        const wl = size * 1.7;
+        ctx.moveTo(sx[i] + Math.cos(a1) * wl, sy[i] + Math.sin(a1) * wl);
+        ctx.lineTo(sx[i] + hx[i] * size * 0.5, sy[i] + hy[i] * size * 0.5);
+        ctx.lineTo(sx[i] + Math.cos(a2) * wl, sy[i] + Math.sin(a2) * wl);
+      }
+      ctx.strokeStyle = BUCKETS[b].color;
+      ctx.lineWidth = BUCKETS[b].width * unit;
+      ctx.stroke();
+    }
+
+    if (falcon.mode === 'dive' || falcon.mode === 'pointer') drawFalcon(unit);
+  }
+
+  function drawFalcon(unit) {
+    project(falcon.x, falcon.y, falcon.z, tmp);
+    let hxf, hyf;
+    if (falcon.mode === 'dive') {
+      project(falcon.x + falcon.vx * 0.05, falcon.y + falcon.vy * 0.05, falcon.z + falcon.vz * 0.05, tmp2);
+      const dx = tmp2.x - tmp.x, dy = tmp2.y - tmp.y, d = Math.hypot(dx, dy) || 1; hxf = dx / d; hyf = dy / d;
+    } else { hxf = 1; hyf = 0; }
+    const s = 9 * unit * tmp.s, head = Math.atan2(hyf, hxf);
+    ctx.strokeStyle = 'rgba(4, 2, 8, 1)'; ctx.lineWidth = 2.2 * unit;
+    ctx.beginPath();
+    const a1 = head + Math.PI - 0.35, a2 = head + Math.PI + 0.35;
+    ctx.moveTo(tmp.x + Math.cos(a1) * s * 1.9, tmp.y + Math.sin(a1) * s * 1.9);
+    ctx.lineTo(tmp.x + hxf * s * 0.6, tmp.y + hyf * s * 0.6);
+    ctx.lineTo(tmp.x + Math.cos(a2) * s * 1.9, tmp.y + Math.sin(a2) * s * 1.9);
+    ctx.stroke();
+  }
+
+  // ---- main loop ----------------------------------------------------------
+  let last = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = Math.min(0.033, (now - last) / 1000); last = now;
+    if (paused) return;
+
+    yaw = 0.35 * Math.sin(clock * 0.045) + 0.12 * Math.sin(clock * 0.11);
+    cosY = Math.cos(yaw); sinY = Math.sin(yaw);
+
+    step(dt);
+    const k = 1 - Math.exp(-dt / 0.6);
+    panX += (cen.x * 0.92 - panX) * k; panY += (cen.y * 0.92 - panY) * k;
+    draw();
+  }
+  requestAnimationFrame(frame);
+
+  // Test hook: advance the simulation without waiting on real time.
+  window.__murmuration = { stats: () => ({ cen, panX, panY, K, W, H, px0: px[0], py0: py[0] }), advance(seconds) { for (let s = 0; s < seconds * 60; s++) { step(1 / 60); panX += (cen.x * 0.92 - panX) * 0.0275; panY += (cen.y * 0.92 - panY) * 0.0275; } draw(); }, N };
+})();
+</script>
+</body>
+</html>
