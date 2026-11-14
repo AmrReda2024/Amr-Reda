@@ -1,0 +1,7 @@
+-dontwarn org.jspecify.annotations.**
+-dontwarn com.google.re2j.**
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
+-keepclassmembers class * { @android.webkit.JavascriptInterface <methods>; }

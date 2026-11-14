@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Downloader</string>
+    <string name="tab_home">Downloads</string>
+    <string name="tab_browser">Browser</string>
+    <string name="tab_files">Files</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="url_hint">Paste a link (file, image, video or web page)</string>
+    <string name="filename_hint">File name (optional)</string>
+    <string name="paste">Paste</string>
+    <string name="download_now">Download</string>
+    <string name="find_media">Find media</string>
+    <string name="home_tip">Tip: \"Download\" saves the link as a file. \"Find media\" scans a web page and lists every video, image, audio and document in it. You can also share a link to this app from any other app.</string>
+    <string name="analyzing">Analyzing link…</string>
+    <string name="no_media_found">No downloadable media was found on this page. Try opening it in the Browser tab and playing the video.</string>
+    <string name="found_n">%1$d items found</string>
+    <string name="select_all">Select all</string>
+    <string name="select_none">Clear</string>
+    <string name="download_n">Download (%1$d)</string>
+    <string name="active_downloads">Active downloads</string>
+    <string name="no_active">No active downloads. Completed files are in the Files tab.</string>
+    <string name="invalid_url">Please enter a valid link</string>
+    <string name="added_to_queue">Added to downloads</string>
+    <string name="added_n_to_queue">%1$d files added to downloads</string>
+
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="pause_all">Pause all</string>
+    <string name="resume_all">Resume all</string>
+    <string name="status_queued">Waiting…</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_failed">Failed</string>
+    <string name="status_cancelled">Cancelled</string>
+
+    <string name="browser_hint">Search or type a web address</string>
+    <string name="back">Back</string>
+    <string name="reload">Reload</string>
+    <string name="media_on_page">Media</string>
+    <string name="download_this">Download this file?</string>
+
+    <string name="search_files">Search files</string>
+    <string name="cat_all">All</string>
+    <string name="cat_video">Videos</string>
+    <string name="cat_image">Images</string>
+    <string name="cat_audio">Audio</string>
+    <string name="cat_document">Documents</string>
+    <string name="cat_archive">Archives</string>
+    <string name="cat_apk">Apps</string>
+    <string name="cat_other">Other</string>
+    <string name="no_files">No downloaded files yet</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="open">Open</string>
+    <string name="share">Share</string>
+    <string name="copy_link">Copy link</string>
+    <string name="delete">Delete</string>
+    <string name="delete_title">Delete download?</string>
+    <string name="delete_file_too">Also delete the file from the phone</string>
+    <string name="link_copied">Link copied</string>
+    <string name="no_app_to_open">No app found to open this file</string>
+
+    <string name="setting_parallel">Simultaneous downloads: %1$d</string>
+    <string name="setting_wifi">Download on Wi-Fi only</string>
+    <string name="setting_wifi_desc">Downloads wait until you are on an unmetered network.</string>
+    <string name="setting_location">Save location</string>
+    <string name="setting_location_desc">Files are sorted into Videos, Images, Audio, Documents… sub-folders. Photos and videos also appear in your Gallery.</string>
+    <string name="clear_history">Clear history</string>
+    <string name="clear_history_desc">Removes completed and cancelled entries from the list. Files on the phone are kept.</string>
+    <string name="about_title">About</string>
+    <string name="about_body">Smart Downloader 1.0 — downloads files, images, videos and audio from direct links and web pages, with pause/resume, background downloads and an in-app browser.\n\nDownload only content you own or have permission to save. Streams protected by DRM or split into segments (HLS/DASH) are not supported.</string>
+
+    <string name="channel_progress">Download progress</string>
+    <string name="channel_done">Finished downloads</string>
+    <string name="notif_completed">Download complete</string>
+    <string name="notif_failed">Download failed</string>
+    <string name="notif_preparing">Preparing downloads…</string>
+    <plurals name="notif_downloading">
+        <item quantity="one">Downloading %1$d file</item>
+        <item quantity="other">Downloading %1$d files</item>
+    </plurals>
+</resources>

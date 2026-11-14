@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">المُنزِّل الذكي</string>
+    <string name="tab_home">التنزيلات</string>
+    <string name="tab_browser">المتصفح</string>
+    <string name="tab_files">الملفات</string>
+    <string name="tab_settings">الإعدادات</string>
+
+    <string name="url_hint">الصق رابطًا (ملف أو صورة أو فيديو أو صفحة ويب)</string>
+    <string name="filename_hint">اسم الملف (اختياري)</string>
+    <string name="paste">لصق</string>
+    <string name="download_now">تنزيل</string>
+    <string name="find_media">استخراج الوسائط</string>
+    <string name="home_tip">نصيحة: زر \"تنزيل\" يحفظ الرابط كملف مباشرة. زر \"استخراج الوسائط\" يفحص صفحة الويب ويعرض كل الفيديوهات والصور والصوتيات والمستندات الموجودة فيها. ويمكنك أيضًا مشاركة أي رابط إلى التطبيق من أي تطبيق آخر.</string>
+    <string name="analyzing">جارٍ تحليل الرابط…</string>
+    <string name="no_media_found">لم يتم العثور على وسائط قابلة للتنزيل في هذه الصفحة. جرّب فتحها من تبويب المتصفح وتشغيل الفيديو.</string>
+    <string name="found_n">تم العثور على %1$d عنصر</string>
+    <string name="select_all">تحديد الكل</string>
+    <string name="select_none">إلغاء التحديد</string>
+    <string name="download_n">تنزيل (%1$d)</string>
+    <string name="active_downloads">التنزيلات الجارية</string>
+    <string name="no_active">لا توجد تنزيلات جارية. الملفات المكتملة موجودة في تبويب الملفات.</string>
+    <string name="invalid_url">من فضلك أدخل رابطًا صحيحًا</string>
+    <string name="added_to_queue">تمت الإضافة إلى التنزيلات</string>
+    <string name="added_n_to_queue">تمت إضافة %1$d ملف إلى التنزيلات</string>
+
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="resume">استئناف</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="remove">إزالة</string>
+    <string name="pause_all">إيقاف الكل</string>
+    <string name="resume_all">استئناف الكل</string>
+    <string name="status_queued">في الانتظار…</string>
+    <string name="status_paused">متوقف مؤقتًا</string>
+    <string name="status_failed">فشل</string>
+    <string name="status_cancelled">ملغى</string>
+
+    <string name="browser_hint">ابحث أو اكتب عنوان موقع</string>
+    <string name="back">رجوع</string>
+    <string name="reload">إعادة التحميل</string>
+    <string name="media_on_page">الوسائط</string>
+    <string name="download_this">تنزيل هذا الملف؟</string>
+
+    <string name="search_files">البحث في الملفات</string>
+    <string name="cat_all">الكل</string>
+    <string name="cat_video">فيديوهات</string>
+    <string name="cat_image">صور</string>
+    <string name="cat_audio">صوتيات</string>
+    <string name="cat_document">مستندات</string>
+    <string name="cat_archive">ملفات مضغوطة</string>
+    <string name="cat_apk">تطبيقات</string>
+    <string name="cat_other">أخرى</string>
+    <string name="no_files">لا توجد ملفات منزّلة بعد</string>
+    <string name="open_in_browser">فتح في المتصفح</string>
+    <string name="open">فتح</string>
+    <string name="share">مشاركة</string>
+    <string name="copy_link">نسخ الرابط</string>
+    <string name="delete">حذف</string>
+    <string name="delete_title">حذف التنزيل؟</string>
+    <string name="delete_file_too">حذف الملف من الهاتف أيضًا</string>
+    <string name="link_copied">تم نسخ الرابط</string>
+    <string name="no_app_to_open">لا يوجد تطبيق لفتح هذا الملف</string>
+
+    <string name="setting_parallel">عدد التنزيلات المتزامنة: %1$d</string>
+    <string name="setting_wifi">التنزيل عبر Wi-Fi فقط</string>
+    <string name="setting_wifi_desc">تنتظر التنزيلات حتى تتصل بشبكة غير محدودة.</string>
+    <string name="setting_location">مكان الحفظ</string>
+    <string name="setting_location_desc">تُرتَّب الملفات في مجلدات فرعية: فيديوهات، صور، صوتيات، مستندات… وتظهر الصور والفيديوهات في المعرض تلقائيًا.</string>
+    <string name="clear_history">مسح السجل</string>
+    <string name="clear_history_desc">يزيل العناصر المكتملة والملغاة من القائمة فقط، وتبقى الملفات على الهاتف.</string>
+    <string name="about_title">عن التطبيق</string>
+    <string name="about_body">المُنزِّل الذكي 1.0 — لتنزيل الملفات والصور والفيديوهات والصوتيات من الروابط المباشرة وصفحات الويب، مع الإيقاف المؤقت والاستئناف والتنزيل في الخلفية ومتصفح مدمج.\n\nيُرجى تنزيل المحتوى الذي تملكه أو المصرّح لك بحفظه فقط. البث المحمي بنظام DRM أو المقسّم إلى أجزاء (HLS/DASH) غير مدعوم.</string>
+
+    <string name="channel_progress">تقدّم التنزيل</string>
+    <string name="channel_done">التنزيلات المكتملة</string>
+    <string name="notif_completed">اكتمل التنزيل</string>
+    <string name="notif_failed">فشل التنزيل</string>
+    <string name="notif_preparing">جارٍ تجهيز التنزيلات…</string>
+    <plurals name="notif_downloading">
+        <item quantity="zero">جارٍ تنزيل %1$d ملف</item>
+        <item quantity="one">جارٍ تنزيل ملف واحد</item>
+        <item quantity="two">جارٍ تنزيل ملفين</item>
+        <item quantity="few">جارٍ تنزيل %1$d ملفات</item>
+        <item quantity="many">جارٍ تنزيل %1$d ملفًا</item>
+        <item quantity="other">جارٍ تنزيل %1$d ملف</item>
+    </plurals>
+</resources>
