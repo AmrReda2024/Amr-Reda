@@ -1,0 +1,35 @@
+name: Android Downloader APK
+
+on:
+  push:
+    paths:
+      - "android-downloader/**"
+      - ".github/workflows/android-downloader.yml"
+  pull_request:
+    paths:
+      - "android-downloader/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-downloader
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Unit tests
+        run: ./gradlew --no-daemon testDebugUnitTest
+      - name: Build APKs
+        run: ./gradlew --no-daemon assembleRelease assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SmartDownloader-apk
+          path: |
+            android-downloader/app/build/outputs/apk/release/app-release.apk
+            android-downloader/app/build/outputs/apk/debug/app-debug.apk
