@@ -18,21 +18,16 @@ android {
     }
 
     // Stable signing key so every new version installs over the previous one.
-    // CI supplies it through repository secrets; locally it falls back to the debug key.
+    // CI supplies it through repository secrets; without them the build falls back to the
+    // auto-generated debug key (fine for testing, but updates then need the same machine's key).
+    val stableKeystore = System.getenv("SIGNING_KEYSTORE_PATH")?.let { file(it) }?.takeIf { it.exists() }
     signingConfigs {
-        create("stable") {
-            val ksPath = System.getenv("SIGNING_KEYSTORE_PATH")
-            if (ksPath != null && file(ksPath).exists()) {
-                storeFile = file(ksPath)
+        if (stableKeystore != null) {
+            create("stable") {
+                storeFile = stableKeystore
                 storePassword = System.getenv("SIGNING_STORE_PASSWORD") ?: "android"
                 keyAlias = System.getenv("SIGNING_KEY_ALIAS") ?: "androiddebugkey"
                 keyPassword = System.getenv("SIGNING_KEY_PASSWORD") ?: "android"
-            } else {
-                val debug = getByName("debug")
-                storeFile = debug.storeFile
-                storePassword = debug.storePassword
-                keyAlias = debug.keyAlias
-                keyPassword = debug.keyPassword
             }
         }
     }
@@ -57,7 +52,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("stable")
+            signingConfig = signingConfigs.getByName(if (stableKeystore != null) "stable" else "debug")
         }
     }
     compileOptions {
