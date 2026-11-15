@@ -355,9 +355,8 @@ class DownloadEngine(
             video.cancel(processId)
         }
         try {
-            video.awaitReady()
             var lastWrite = 0L
-            val output = video.download(
+            val output = video.downloadWithRefresh(
                 url = e.url, workDir = workDir,
                 format = e.formatSelector ?: "bv*+ba/b", sort = e.formatSort, audioFormat = e.audioFormat,
                 processId = processId,

@@ -123,4 +123,5 @@
     <string name="err_no_internet">لا يوجد اتصال بالإنترنت.</string>
     <string name="err_timeout">انتهت مهلة الاتصال. اضغط إعادة المحاولة للاستكمال من حيث توقف.</string>
     <string name="err_no_space">لا توجد مساحة تخزين كافية على الهاتف.</string>
+    <string name="err_sign_in_needed">الموقع يطلب تسجيل الدخول أولًا. ادخل الإعدادات ← الحسابات وسجّل الدخول مرة واحدة ثم اضغط إعادة المحاولة.</string>
 </resources>

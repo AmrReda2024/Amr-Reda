@@ -85,6 +85,28 @@ class YtDlpEngine(private val context: Context) {
         if (s is State.Failed) throw VideoEngineException(s.message, VideoFormats.ErrorHint.UPDATE)
     }
 
+    /** Ready, and not in the middle of replacing yt-dlp (so a first request after install uses the fresh version). */
+    private suspend fun awaitUsable() {
+        awaitReady()
+        _updating.first { !it }
+    }
+
+    @Volatile private var lastRefreshAttempt = 0L
+
+    /**
+     * Sites change often; when a request fails, update yt-dlp once and report whether a newer
+     * version was installed (so the caller can retry). Rate-limited to one attempt per 6 hours.
+     */
+    private suspend fun refreshIfStale(): Boolean {
+        val now = System.currentTimeMillis()
+        if (now - lastRefreshAttempt < 6L * 3600 * 1000) return false
+        lastRefreshAttempt = now
+        return update().getOrDefault(false)
+    }
+
+    private fun worthRefreshing(hint: VideoFormats.ErrorHint) =
+        hint == VideoFormats.ErrorHint.UPDATE || hint == VideoFormats.ErrorHint.RATE_LIMIT
+
     /** Updates yt-dlp to the latest stable release. Returns true when a new version was installed. */
     suspend fun update(): Result<Boolean> = withContext(Dispatchers.IO) {
         if (_updating.value) return@withContext Result.success(false)
@@ -109,12 +131,20 @@ class YtDlpEngine(private val context: Context) {
     }
 
     suspend fun fetchDetails(url: String): VideoDetails = withContext(Dispatchers.IO) {
-        awaitReady()
+        awaitUsable()
+        try {
+            fetchOnce(url)
+        } catch (e: VideoEngineException) {
+            if (worthRefreshing(e.hint) && refreshIfStale()) fetchOnce(url) else throw e
+        }
+    }
+
+    private fun fetchOnce(url: String): VideoDetails {
         val request = YoutubeDLRequest(url)
             .addOption("--no-playlist")
             .addOption("--socket-timeout", 20)
         val cookieFile = withCookies(request, url)
-        try {
+        return try {
             val info = YoutubeDL.getInstance().getInfo(request)
             val formats = info.formats.orEmpty().map {
                 FormatInfo(
@@ -143,6 +173,26 @@ class YtDlpEngine(private val context: Context) {
             throw VideoEngineException(msg, hint)
         } finally {
             cookieFile?.delete()
+        }
+    }
+
+    /** [download] with one automatic engine update + retry when the site has changed. */
+    suspend fun downloadWithRefresh(
+        url: String,
+        workDir: File,
+        format: String,
+        sort: String?,
+        audioFormat: String?,
+        processId: String,
+        onProgress: (VideoFormats.Progress) -> Unit,
+    ): File {
+        awaitUsable()
+        return try {
+            download(url, workDir, format, sort, audioFormat, processId, onProgress)
+        } catch (e: java.io.IOException) {
+            if (worthRefreshing(VideoFormats.friendlyError(e.message).second) && refreshIfStale()) {
+                download(url, workDir, format, sort, audioFormat, processId, onProgress)
+            } else throw e
         }
     }
 
