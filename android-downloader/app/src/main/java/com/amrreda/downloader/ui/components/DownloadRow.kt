@@ -37,10 +37,11 @@ fun ActiveDownloadRow(item: DownloadEntity, engine: DownloadEngine) {
     val status = item.statusEnum
     Card(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Thumb(item.url, item.categoryEnum, 48.dp)
+            if (item.thumbnailUrl != null) Thumb(item.thumbnailUrl, com.amrreda.downloader.data.FileCategory.IMAGE, 48.dp)
+            else Thumb(item.url, item.categoryEnum, 48.dp)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(item.fileName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleSmall)
+                Text(item.displayName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleSmall)
                 Spacer(Modifier.height(6.dp))
                 when {
                     status == DownloadStatus.RUNNING && item.totalBytes > 0 ->
@@ -86,14 +87,16 @@ private fun statusLine(item: DownloadEntity): String {
     else Format.bytes(item.downloadedBytes)
     return when (item.statusEnum) {
         DownloadStatus.RUNNING -> buildString {
+            item.qualityLabel?.let { append(it).append(" • ") }
             if (item.totalBytes > 0) append("${(item.progress * 100).toInt()}% • ")
             append(sizes).append(" • ").append(Format.speed(item.speedBps))
             val eta = Format.eta(item.totalBytes - item.downloadedBytes, item.speedBps)
             if (eta.isNotEmpty()) append(" • ").append(eta)
         }
-        DownloadStatus.QUEUED -> stringResource(R.string.status_queued)
+        DownloadStatus.QUEUED -> stringResource(R.string.status_queued) + (item.qualityLabel?.let { " • $it" } ?: "")
         DownloadStatus.PAUSED -> stringResource(R.string.status_paused) + " • " + sizes
-        DownloadStatus.FAILED -> stringResource(R.string.status_failed) + ": " + (item.error ?: "")
+        DownloadStatus.FAILED -> stringResource(R.string.status_failed) + ": " +
+            com.amrreda.downloader.ui.ErrorText.describe(androidx.compose.ui.platform.LocalContext.current, item.error)
         DownloadStatus.CANCELLED -> stringResource(R.string.status_cancelled)
         DownloadStatus.COMPLETED -> sizes
     }

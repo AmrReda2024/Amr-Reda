@@ -13,8 +13,38 @@ android {
         applicationId = "com.amrreda.downloader"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "2.0.0"
+    }
+
+    // Stable signing key so every new version installs over the previous one.
+    // CI supplies it through repository secrets; without them the build falls back to the
+    // auto-generated debug key (fine for testing, but updates then need the same machine's key).
+    val stableKeystore = System.getenv("SIGNING_KEYSTORE_PATH")?.let { file(it) }?.takeIf { it.exists() }
+    signingConfigs {
+        if (stableKeystore != null) {
+            create("stable") {
+                storeFile = stableKeystore
+                storePassword = System.getenv("SIGNING_STORE_PASSWORD") ?: "android"
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS") ?: "androiddebugkey"
+                keyPassword = System.getenv("SIGNING_KEY_PASSWORD") ?: "android"
+            }
+        }
+    }
+
+    // One APK per processor type keeps the download small (the video engine ships native code).
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86_64")
+            isUniversalApk = false
+        }
+    }
+
+    packaging {
+        // yt-dlp/Python/FFmpeg binaries are executed from the native library folder, so they must be extracted.
+        jniLibs { useLegacyPackaging = true }
     }
 
     buildTypes {
@@ -22,8 +52,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Signed with the debug key so the APK installs directly; replace with your own keystore before publishing.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(if (stableKeystore != null) "stable" else "debug")
         }
     }
     compileOptions {
@@ -59,6 +88,10 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("io.coil-kt:coil-video:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+
+    // yt-dlp (YouTube, Instagram, Facebook, TikTok, X and 1000+ sites) + FFmpeg for merging/converting.
+    implementation("io.github.junkfood02.youtubedl-android:library:0.18.1")
+    implementation("io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1")
 
     testImplementation("junit:junit:4.13.2")
 }

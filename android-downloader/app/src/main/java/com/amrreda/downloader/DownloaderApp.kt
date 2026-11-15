@@ -8,6 +8,7 @@ import com.amrreda.downloader.data.AppDatabase
 import com.amrreda.downloader.data.AppSettings
 import com.amrreda.downloader.engine.DownloadEngine
 import com.amrreda.downloader.engine.Notifications
+import com.amrreda.downloader.engine.YtDlpEngine
 import com.amrreda.downloader.extract.MediaExtractor
 
 class DownloaderApp : Application(), ImageLoaderFactory {
@@ -19,13 +20,16 @@ class DownloaderApp : Application(), ImageLoaderFactory {
         private set
     lateinit var extractor: MediaExtractor
         private set
+    lateinit var video: YtDlpEngine
+        private set
 
     override fun onCreate() {
         super.onCreate()
         Notifications.createChannels(this)
         database = AppDatabase.create(this)
         settings = AppSettings(this)
-        engine = DownloadEngine(this, database.downloads(), settings)
+        video = YtDlpEngine(this).also { it.start() }
+        engine = DownloadEngine(this, database.downloads(), settings, video)
         extractor = MediaExtractor(engine.client)
     }
 

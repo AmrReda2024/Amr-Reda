@@ -11,8 +11,15 @@ import androidx.lifecycle.viewModelScope
 import com.amrreda.downloader.DownloaderApp
 import com.amrreda.downloader.R
 import com.amrreda.downloader.data.DownloadEntity
+import com.amrreda.downloader.engine.CookieExporter
+import com.amrreda.downloader.engine.QualityOption
+import com.amrreda.downloader.engine.VideoDetails
+import com.amrreda.downloader.engine.VideoEngineException
+import com.amrreda.downloader.engine.VideoFormats
 import com.amrreda.downloader.extract.ExtractResult
 import com.amrreda.downloader.extract.MediaItem
+import com.amrreda.downloader.extract.Platform
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -22,6 +29,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val container = app as DownloaderApp
     val engine = container.engine
     val settings = container.settings
+    val video = container.video
 
     val downloads: StateFlow<List<DownloadEntity>> =
         container.database.downloads().observeAll().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -47,6 +55,114 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     // ---- Navigation request (e.g. from a shared link) ----
     var requestedTab by mutableStateOf<Int?>(null)
 
+    // ---- Video sites (YouTube, Instagram, Facebook, ...) via yt-dlp ----
+    /** Non-null while the quality sheet is open. */
+    var videoSheetUrl by mutableStateOf<String?>(null)
+        private set
+    var videoDetails by mutableStateOf<VideoDetails?>(null)
+        private set
+    var videoError by mutableStateOf<Pair<String, VideoFormats.ErrorHint>?>(null)
+        private set
+    private var videoJob: Job? = null
+
+    // ---- Clipboard link suggestion ----
+    var clipboardSuggestion by mutableStateOf<String?>(null)
+        private set
+    private var lastClipboardOffered: String? = null
+
+    // ---- Accounts ----
+    var signedIn by mutableStateOf<Set<Platform>>(emptySet())
+        private set
+
+    fun refreshAccounts() {
+        signedIn = Platform.entries.filter { CookieExporter.isSignedIn(it) }.toSet()
+    }
+
+    fun signIn(platform: Platform) = openInBrowser(platform.loginUrl)
+
+    fun signOut(platform: Platform) {
+        CookieExporter.signOut(platform)
+        refreshAccounts()
+    }
+
+    fun openVideo(url: String) {
+        videoJob?.cancel()
+        videoSheetUrl = url
+        videoDetails = null
+        videoError = null
+        videoJob = viewModelScope.launch {
+            try {
+                videoDetails = video.fetchDetails(url)
+            } catch (e: VideoEngineException) {
+                videoError = e.message.orEmpty() to e.hint
+            } catch (t: Throwable) {
+                if (t is kotlinx.coroutines.CancellationException) throw t
+                videoError = (t.message ?: t.javaClass.simpleName) to VideoFormats.ErrorHint.UPDATE
+            }
+        }
+    }
+
+    fun retryVideo() { videoSheetUrl?.let(::openVideo) }
+
+    /** Updates yt-dlp first, then retries the current link with the new version. */
+    fun updateAndRetryVideo() {
+        val url = videoSheetUrl ?: return
+        videoError = null
+        videoDetails = null
+        videoJob?.cancel()
+        videoJob = viewModelScope.launch {
+            video.update()
+            openVideo(url)
+        }
+    }
+
+    fun closeVideoSheet() {
+        videoJob?.cancel()
+        videoSheetUrl = null
+        videoDetails = null
+        videoError = null
+    }
+
+    fun downloadVideo(option: QualityOption) {
+        val details = videoDetails ?: return
+        engine.enqueueVideo(details, option)
+        toast(R.string.added_to_queue)
+        closeVideoSheet()
+        requestedTab = 0
+    }
+
+    var engineUpdateMessage by mutableStateOf<String?>(null)
+        private set
+
+    fun updateVideoEngine() {
+        viewModelScope.launch {
+            engineUpdateMessage = null
+            val r = video.update()
+            val app = getApplication<Application>()
+            engineUpdateMessage = r.fold(
+                onSuccess = { app.getString(if (it) R.string.engine_updated else R.string.engine_up_to_date) },
+                onFailure = { app.getString(R.string.engine_update_failed, it.message ?: "") },
+            )
+        }
+    }
+
+    /** Called when the window gains focus (Android only allows clipboard reads then). */
+    fun onClipboardText(text: String?) {
+        val url = text?.let { URL_REGEX.find(it)?.value } ?: return
+        if (url == lastClipboardOffered || url == urlInput || url == videoSheetUrl) return
+        lastClipboardOffered = url
+        clipboardSuggestion = url
+    }
+
+    fun acceptClipboard() {
+        val url = clipboardSuggestion ?: return
+        clipboardSuggestion = null
+        urlInput = url
+        smartDownload()
+    }
+
+    fun dismissClipboard() { clipboardSuggestion = null }
+
     private fun toast(res: Int, vararg args: Any) =
         Toast.makeText(getApplication(), getApplication<Application>().getString(res, *args), Toast.LENGTH_SHORT).show()
 
@@ -58,8 +174,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         return withScheme.takeIf { android.util.Patterns.WEB_URL.matcher(it).matches() || it.contains('.') }
     }
 
-    fun downloadDirect() {
+    /** "Download" button: video sites open the quality picker, anything else downloads as a file. */
+    fun smartDownload() {
         val url = normalizedUrl(urlInput) ?: return toast(R.string.invalid_url)
+        urlInput = url
+        if (Platform.isVideoSite(url)) {
+            openVideo(url)
+            return
+        }
         engine.enqueue(url, fileNameInput.takeIf { it.isNotBlank() })
         fileNameInput = ""
         toast(R.string.added_to_queue)
@@ -69,6 +191,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         val url = normalizedUrl(urlInput) ?: return toast(R.string.invalid_url)
         urlInput = url
         lastAnalyzedUrl = url
+        if (Platform.isVideoSite(url)) {
+            openVideo(url)
+            return
+        }
         analyzing = true
         analyzeError = null
         pageTitle = null
@@ -85,11 +211,21 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     is ExtractResult.Page -> {
                         pageTitle = r.title
                         foundItems.addAll(r.items)
-                        if (r.items.isEmpty()) analyzeError = getApplication<Application>().getString(R.string.no_media_found)
+                        // No video in the HTML (e.g. loaded by JavaScript): quietly let yt-dlp's 1000+ extractors try.
+                        if (r.items.none { it.category == com.amrreda.downloader.data.FileCategory.VIDEO }) {
+                            val details = runCatching { video.fetchDetails(url) }.getOrNull()
+                            if (details != null && details.options.any { !it.isAudio }) {
+                                videoSheetUrl = url
+                                videoDetails = details
+                                videoError = null
+                            } else if (r.items.isEmpty()) {
+                                analyzeError = getApplication<Application>().getString(R.string.no_media_found)
+                            }
+                        }
                     }
                 }
             } catch (t: Throwable) {
-                analyzeError = t.message ?: t.javaClass.simpleName
+                analyzeError = ErrorText.describe(getApplication(), t.message ?: t.javaClass.simpleName)
             } finally {
                 analyzing = false
             }
@@ -131,8 +267,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun handleSharedText(text: String?) {
         val url = text?.let { URL_REGEX.find(it)?.value } ?: return
         urlInput = url
+        lastClipboardOffered = url
         requestedTab = 0
-        analyze()
+        if (Platform.isVideoSite(url)) openVideo(url) else analyze()
     }
 
     private companion object {

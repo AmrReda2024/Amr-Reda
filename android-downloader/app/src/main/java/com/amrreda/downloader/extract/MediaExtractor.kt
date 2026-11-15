@@ -33,11 +33,16 @@ sealed interface ExtractResult {
 class MediaExtractor(private val client: OkHttpClient) {
 
     suspend fun analyze(url: String): ExtractResult = withContext(Dispatchers.IO) {
-        val request = Request.Builder().url(url)
-            .header("User-Agent", DownloadEngine.DEFAULT_UA)
+        fun request(ua: String) = Request.Builder().url(url)
+            .header("User-Agent", ua)
             .header("Accept", "text/html,application/xhtml+xml,*/*;q=0.8")
             .build()
-        client.newCall(request).execute().use { resp ->
+        var response = client.newCall(request(DownloadEngine.DEFAULT_UA)).execute()
+        if (response.code == 403) {
+            response.close()
+            response = client.newCall(request(DownloadEngine.FALLBACK_UA)).execute()
+        }
+        response.use { resp ->
             if (!resp.isSuccessful) throw IOException("HTTP ${resp.code}")
             val body = resp.body ?: throw IOException("Empty response")
             val type = body.contentType()

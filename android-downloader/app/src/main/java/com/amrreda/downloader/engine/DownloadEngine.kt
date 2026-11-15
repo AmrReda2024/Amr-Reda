@@ -9,6 +9,7 @@ import android.webkit.CookieManager
 import com.amrreda.downloader.data.AppSettings
 import com.amrreda.downloader.data.DownloadDao
 import com.amrreda.downloader.data.DownloadEntity
+import com.amrreda.downloader.data.DownloadKind
 import com.amrreda.downloader.data.DownloadStatus
 import com.amrreda.downloader.data.FileCategory
 import com.amrreda.downloader.service.DownloadService
@@ -51,6 +52,7 @@ class DownloadEngine(
     private val context: Context,
     private val dao: DownloadDao,
     private val settings: AppSettings,
+    private val video: YtDlpEngine,
 ) {
     val client: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(20, TimeUnit.SECONDS)
@@ -105,6 +107,32 @@ class DownloadEngine(
         }
     }
 
+    /** Queues a video/audio download from YouTube, Instagram, Facebook, etc. through yt-dlp. */
+    fun enqueueVideo(details: VideoDetails, option: QualityOption) {
+        scope.launch {
+            val ext = option.audioFormat ?: "mp4"
+            val base = FileNames.sanitize(details.title).take(90)
+            dao.insert(
+                DownloadEntity(
+                    url = details.url,
+                    fileName = "$base.$ext",
+                    mimeType = FileCategory.mimeFromName("x.$ext"),
+                    category = (if (option.isAudio) FileCategory.AUDIO else FileCategory.VIDEO).name,
+                    totalBytes = option.estimatedBytes,
+                    kind = DownloadKind.VIDEO.name,
+                    title = details.title,
+                    thumbnailUrl = details.thumbnail,
+                    formatSelector = option.format,
+                    formatSort = option.sort,
+                    audioFormat = option.audioFormat,
+                    qualityLabel = option.label,
+                    platform = details.platform?.name,
+                )
+            )
+            pump()
+        }
+    }
+
     fun pause(id: Long) {
         scope.launch {
             jobs.remove(id)?.cancelAndJoin()
@@ -130,7 +158,7 @@ class DownloadEngine(
         scope.launch {
             jobs.remove(id)?.cancelAndJoin()
             val e = dao.get(id) ?: return@launch
-            e.tempPath?.let { File(it).delete() }
+            deletePartial(e)
             dao.update(e.copy(status = DownloadStatus.CANCELLED.name, downloadedBytes = 0, speedBps = 0, tempPath = null))
             pump()
         }
@@ -140,7 +168,7 @@ class DownloadEngine(
         scope.launch {
             jobs.remove(id)?.cancelAndJoin()
             val e = dao.get(id) ?: return@launch
-            e.tempPath?.let { File(it).delete() }
+            deletePartial(e)
             if (deleteFile) StorageSaver.delete(context, e.contentUri)
             dao.delete(id)
             pump()
@@ -161,7 +189,14 @@ class DownloadEngine(
 
     fun clearFinished() { scope.launch { dao.clearFinished() } }
 
-    private fun partialSize(e: DownloadEntity): Long = e.tempPath?.let { File(it) }?.takeIf { it.exists() }?.length() ?: 0L
+    private fun partialSize(e: DownloadEntity): Long {
+        val f = e.tempPath?.let { File(it) }?.takeIf { it.exists() } ?: return 0L
+        return if (f.isDirectory) e.downloadedBytes else f.length()
+    }
+
+    private fun deletePartial(e: DownloadEntity) {
+        e.tempPath?.let { File(it).deleteRecursively() }
+    }
 
     private fun networkAllowed(): Boolean {
         if (!settings.wifiOnly.value) return true
@@ -194,25 +229,36 @@ class DownloadEngine(
     @OptIn(InternalCoroutinesApi::class)
     private suspend fun runDownload(id: Long) {
         var e = dao.get(id) ?: return
+        if (e.isVideoKind) return runVideoDownload(e)
         val temp = e.tempPath?.let(::File) ?: File(tempDir, "dl_$id.part")
         var existing = if (temp.exists()) temp.length() else 0L
         e = e.copy(status = DownloadStatus.RUNNING.name, tempPath = temp.absolutePath, error = null, downloadedBytes = existing)
         dao.update(e)
 
         try {
-            val rb = Request.Builder()
+            fun request(userAgent: String) = Request.Builder()
                 .url(e.url)
-                .header("User-Agent", e.userAgent ?: DEFAULT_UA)
+                .header("User-Agent", userAgent)
                 .header("Accept", "*/*")
-            e.referer?.let { rb.header("Referer", it) }
-            cookieFor(e.url)?.let { rb.header("Cookie", it) }
-            if (existing > 0) rb.header("Range", "bytes=$existing-")
+                .apply {
+                    e.referer?.let { header("Referer", it) }
+                    cookieFor(e.url)?.let { header("Cookie", it) }
+                    if (existing > 0) header("Range", "bytes=$existing-")
+                }
+                .build()
 
-            val call = client.newCall(rb.build())
+            var call = client.newCall(request(e.userAgent ?: DEFAULT_UA))
             // Abort the socket immediately when the user pauses/cancels.
             val handle = currentCoroutineContext().job.invokeOnCompletion(onCancelling = true, invokeImmediately = true) { call.cancel() }
             try {
-                call.execute().use { resp ->
+                var first = call.execute()
+                if (first.code == 403) {
+                    // Some CDNs challenge browser-like clients (e.g. Cloudflare bot checks); retry once as a plain client.
+                    first.close()
+                    call = client.newCall(request(FALLBACK_UA))
+                    first = call.execute()
+                }
+                first.use { resp ->
                     if (resp.code == 416 && existing > 0) {
                         temp.delete()
                         throw IOException("Server rejected resume; tap retry to restart")
@@ -298,6 +344,65 @@ class DownloadEngine(
         }
     }
 
+    @OptIn(InternalCoroutinesApi::class)
+    private suspend fun runVideoDownload(start: DownloadEntity) {
+        val id = start.id
+        val workDir = File(tempDir, "video_$id")
+        var e = start.copy(status = DownloadStatus.RUNNING.name, tempPath = workDir.absolutePath, error = null)
+        dao.update(e)
+        val processId = "dl_$id"
+        val handle = currentCoroutineContext().job.invokeOnCompletion(onCancelling = true, invokeImmediately = true) {
+            video.cancel(processId)
+        }
+        try {
+            var lastWrite = 0L
+            val output = video.downloadWithRefresh(
+                url = e.url, workDir = workDir,
+                format = e.formatSelector ?: "bv*+ba/b", sort = e.formatSort, audioFormat = e.audioFormat,
+                processId = processId,
+            ) { p ->
+                // Note: for separate video+audio streams yt-dlp reports each stream from 0 to 100%.
+                val now = SystemClock.elapsedRealtime()
+                if (now - lastWrite >= 500) {
+                    lastWrite = now
+                    val total = if (p.totalBytes > 0) p.totalBytes else -1
+                    val done = if (total > 0) (total * p.percent / 100f).toLong() else 0L
+                    kotlinx.coroutines.runBlocking {
+                        val cur = dao.get(id) ?: return@runBlocking
+                        if (cur.statusEnum != DownloadStatus.RUNNING) return@runBlocking
+                        e = cur.copy(totalBytes = total, downloadedBytes = done, speedBps = p.speedBps.coerceAtLeast(0))
+                        dao.update(e)
+                    }
+                }
+            }
+            currentCoroutineContext().ensureActive()
+            val name = FileNames.sanitize(output.name.replace(Regex("""\s\[[A-Za-z0-9_-]{5,}]"""), ""))
+            val mime = FileCategory.mimeFromName(name) ?: e.mimeType
+            val category = FileCategory.of(mime, name)
+            val uri = StorageSaver.publish(context, output, name, mime, category)
+            val size = output.length()
+            workDir.deleteRecursively()
+            val done = (dao.get(id) ?: e).copy(
+                status = DownloadStatus.COMPLETED.name, fileName = name, mimeType = mime, category = category.name,
+                totalBytes = size, downloadedBytes = size, speedBps = 0, error = null,
+                contentUri = uri.toString(), tempPath = null, completedAt = System.currentTimeMillis(),
+            )
+            dao.update(done)
+            Notifications.notifyCompleted(context, done)
+        } catch (c: CancellationException) {
+            throw c
+        } catch (t: Throwable) {
+            if (!currentCoroutineContext().isActive) throw CancellationException("cancelled")
+            val failed = (dao.get(id) ?: e).copy(
+                status = DownloadStatus.FAILED.name, error = t.message ?: t.javaClass.simpleName, speedBps = 0,
+            )
+            dao.update(failed)
+            Notifications.notifyFailed(context, failed)
+        } finally {
+            handle.dispose()
+        }
+    }
+
     private fun parseRangeTotal(header: String?): Long? =
         header?.substringAfterLast('/', "")?.trim()?.takeIf { it != "*" }?.toLongOrNull()
 
@@ -305,6 +410,7 @@ class DownloadEngine(
         runCatching { CookieManager.getInstance().getCookie(url) }.getOrNull()?.takeIf { it.isNotBlank() }
 
     companion object {
+        const val FALLBACK_UA = "SmartDownloader/2.0 (Android)"
         const val DEFAULT_UA =
             "Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36"
     }
