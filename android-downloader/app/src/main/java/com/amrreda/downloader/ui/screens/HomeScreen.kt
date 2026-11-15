@@ -1,7 +1,15 @@
 package com.amrreda.downloader.ui.screens
 
 import android.content.ClipboardManager
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AssistChip
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,6 +56,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amrreda.downloader.R
 import com.amrreda.downloader.data.DownloadStatus
 import com.amrreda.downloader.extract.MediaItem
+import com.amrreda.downloader.extract.Platform
 import com.amrreda.downloader.ui.MainViewModel
 import com.amrreda.downloader.ui.components.ActiveDownloadRow
 import com.amrreda.downloader.ui.components.Thumb
@@ -75,6 +84,21 @@ fun HomeScreen(vm: MainViewModel, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
+            vm.clipboardSuggestion?.let { link ->
+                item {
+                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)) {
+                        Column(Modifier.padding(14.dp)) {
+                            Text(stringResource(R.string.clipboard_found), style = MaterialTheme.typography.titleSmall)
+                            Text(link, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodySmall)
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                TextButton(onClick = { vm.dismissClipboard() }) { Text(stringResource(R.string.dismiss)) }
+                                Button(onClick = { vm.acceptClipboard() }) { Text(stringResource(R.string.download_now)) }
+                            }
+                        }
+                    }
+                }
+            }
+            item { PlatformRow(onOpen = { vm.openInBrowser(it.homeUrl) }) }
             item {
                 OutlinedTextField(
                     value = vm.urlInput,
@@ -103,7 +127,7 @@ fun HomeScreen(vm: MainViewModel, modifier: Modifier = Modifier) {
             }
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button(onClick = { vm.downloadDirect() }, modifier = Modifier.weight(1f)) {
+                    Button(onClick = { vm.smartDownload() }, modifier = Modifier.weight(1f)) {
                         Icon(Icons.Filled.Download, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.download_now))
                     }
                     FilledTonalButton(onClick = { vm.analyze() }, enabled = !vm.analyzing, modifier = Modifier.weight(1f)) {
@@ -184,4 +208,34 @@ fun FoundItemRow(item: MediaItem, selected: Boolean, downloadMode: Boolean = fal
             else Checkbox(checked = selected, onCheckedChange = { onToggle() })
         }
     }
+}
+
+@Composable
+private fun PlatformRow(onOpen: (Platform) -> Unit) {
+    Column {
+        Text(stringResource(R.string.supported_sites), style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(
+            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Platform.entries.forEach { p ->
+                AssistChip(
+                    onClick = { onOpen(p) },
+                    label = { Text(p.displayName) },
+                    leadingIcon = {
+                        Box(Modifier.size(10.dp).clip(CircleShape).background(platformColor(p)))
+                    },
+                )
+            }
+        }
+    }
+}
+
+fun platformColor(p: Platform): Color = when (p) {
+    Platform.YOUTUBE -> Color(0xFFFF0000)
+    Platform.INSTAGRAM -> Color(0xFFE1306C)
+    Platform.FACEBOOK -> Color(0xFF1877F2)
+    Platform.TIKTOK -> Color(0xFF25F4EE)
+    Platform.X -> Color(0xFF888888)
 }

@@ -6,12 +6,12 @@
     <string name="tab_files">Files</string>
     <string name="tab_settings">Settings</string>
 
-    <string name="url_hint">Paste a link (file, image, video or web page)</string>
+    <string name="url_hint">Paste a link: YouTube, Instagram, Facebook, TikTok, X, or any file/page</string>
     <string name="filename_hint">File name (optional)</string>
     <string name="paste">Paste</string>
     <string name="download_now">Download</string>
     <string name="find_media">Find media</string>
-    <string name="home_tip">Tip: \"Download\" saves the link as a file. \"Find media\" scans a web page and lists every video, image, audio and document in it. You can also share a link to this app from any other app.</string>
+    <string name="home_tip">"Download" opens the quality picker for YouTube, Instagram, Facebook, TikTok, X and 1000+ video sites, and saves any other link as a file. "Find media" lists every video, image and document on a web page. You can also share a link to this app from any other app.</string>
     <string name="analyzing">Analyzing link…</string>
     <string name="no_media_found">No downloadable media was found on this page. Try opening it in the Browser tab and playing the video.</string>
     <string name="found_n">%1$d items found</string>
@@ -70,7 +70,7 @@
     <string name="clear_history">Clear history</string>
     <string name="clear_history_desc">Removes completed and cancelled entries from the list. Files on the phone are kept.</string>
     <string name="about_title">About</string>
-    <string name="about_body">Smart Downloader 1.0 — downloads files, images, videos and audio from direct links and web pages, with pause/resume, background downloads and an in-app browser.\n\nDownload only content you own or have permission to save. Streams protected by DRM or split into segments (HLS/DASH) are not supported.</string>
+    <string name="about_body">Smart Downloader 2.0: downloads videos and audio from YouTube, Instagram, Facebook, TikTok, X and 1000+ sites (powered by the open-source yt-dlp and FFmpeg), plus files and images from any link, with pause/resume, background downloads and an in-app browser.\n\nDownload only content you own or have permission to save, and respect each platform\'s terms. DRM-protected content (e.g. paid streaming services) is not supported.</string>
 
     <string name="channel_progress">Download progress</string>
     <string name="channel_done">Finished downloads</string>
@@ -81,4 +81,42 @@
         <item quantity="one">Downloading %1$d file</item>
         <item quantity="other">Downloading %1$d files</item>
     </plurals>
+    <string name="clipboard_found">Link found in your clipboard</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="supported_sites">Supported sites (tap to browse)</string>
+    <string name="download_this_video">Download this video</string>
+    <string name="video_fetching">Reading video details…</string>
+    <string name="video_quality">Video quality</string>
+    <string name="audio_only">Audio only</string>
+    <string name="download_quality">Download %1$s</string>
+    <string name="quality_best">Best</string>
+    <string name="video_failed">Couldn\'t read this video</string>
+    <string name="hint_sign_in">This content needs you to be signed in. Sign in to %1$s once inside the app (Settings → Accounts) and try again.</string>
+    <string name="hint_sign_in_generic">This content needs you to be signed in. Open it in the Browser tab, sign in, then try again.</string>
+    <string name="hint_unsupported">This link isn\'t a video page that can be downloaded. Open it in the Browser tab and use the Media button.</string>
+    <string name="hint_rate_limit">The site is temporarily limiting requests. Wait a few minutes and try again.</string>
+    <string name="hint_update">Sites change often. Updating the video engine usually fixes this.</string>
+    <string name="sign_in_to">Sign in to %1$s</string>
+    <string name="update_engine">Update video engine</string>
+    <string name="engine_updated">Video engine updated to the latest version</string>
+    <string name="engine_up_to_date">Video engine is already up to date</string>
+    <string name="engine_update_failed">Update failed: %1$s</string>
+    <string name="accounts_title">Accounts</string>
+    <string name="accounts_desc">Needed for private or login-only content (most Instagram posts, age-restricted YouTube videos). You sign in on the platform\'s own page inside the app; your password is never seen or stored by this app.</string>
+    <string name="signed_in">Signed in</string>
+    <string name="not_signed_in">Not signed in</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="engine_title">Video engine</string>
+    <string name="engine_starting">Starting…</string>
+    <string name="engine_ready">Ready • yt-dlp %1$s</string>
+    <string name="engine_failed">Not available: %1$s</string>
+    <string name="engine_desc">Updates itself automatically every few days to keep up with site changes.</string>
+    <string name="err_forbidden">The server refused access to this file (it may need sign-in or block downloads).</string>
+    <string name="err_not_found">The file no longer exists at this link.</string>
+    <string name="err_rate_limited">Too many requests. Wait a little and retry.</string>
+    <string name="err_server">The server had a problem. Try again later.</string>
+    <string name="err_no_internet">No internet connection.</string>
+    <string name="err_timeout">The connection timed out. Tap retry to continue from where it stopped.</string>
+    <string name="err_no_space">Not enough storage space on the phone.</string>
 </resources>

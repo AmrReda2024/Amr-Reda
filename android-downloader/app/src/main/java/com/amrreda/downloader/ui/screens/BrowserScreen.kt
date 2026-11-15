@@ -11,6 +11,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,6 +58,7 @@ import com.amrreda.downloader.R
 import com.amrreda.downloader.data.FileCategory
 import com.amrreda.downloader.engine.FileNames
 import com.amrreda.downloader.extract.MediaItem
+import com.amrreda.downloader.extract.Platform
 import com.amrreda.downloader.ui.MainViewModel
 import org.json.JSONArray
 import org.json.JSONTokener
@@ -155,6 +157,10 @@ fun BrowserScreen(vm: MainViewModel, modifier: Modifier = Modifier) {
                         settings.builtInZoomControls = true
                         settings.displayZoomControls = false
                         settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                        // Present as regular Chrome: Google refuses sign-in from user agents marked as WebView ("; wv").
+                        settings.userAgentString = settings.userAgentString
+                            .replace("; wv", "")
+                            .replace(Regex("Version/\\d+(\\.\\d+)* "), "")
                         CookieManager.getInstance().setAcceptCookie(true)
                         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
 
@@ -167,6 +173,8 @@ fun BrowserScreen(vm: MainViewModel, modifier: Modifier = Modifier) {
 
                             override fun onPageFinished(view: WebView, url: String) {
                                 canGoBack = view.canGoBack()
+                                CookieManager.getInstance().flush()
+                                vm.refreshAccounts()
                                 scan(view)
                                 // Re-scan after lazy-loaded content appears.
                                 view.postDelayed({ scan(view) }, 2500)
@@ -215,15 +223,29 @@ fun BrowserScreen(vm: MainViewModel, modifier: Modifier = Modifier) {
             )
         }
 
+        Column(
+            Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+        if (Platform.isVideoSite(address)) {
+            ExtendedFloatingActionButton(
+                onClick = { vm.openVideo(webView?.url ?: address) },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = { Icon(Icons.Filled.Download, null) },
+                text = { Text(stringResource(R.string.download_this_video)) },
+            )
+        }
         if (vm.browserMedia.isNotEmpty()) {
             ExtendedFloatingActionButton(
                 onClick = { webView?.let { scan(it) }; showSheet = true },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
                 icon = {
                     BadgedBox(badge = { Badge { Text(vm.browserMedia.size.toString()) } }) { Icon(Icons.Filled.Download, null) }
                 },
                 text = { Text(stringResource(R.string.media_on_page)) },
             )
+        }
         }
     }
 

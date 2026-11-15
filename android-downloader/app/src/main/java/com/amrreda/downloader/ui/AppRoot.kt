@@ -18,6 +18,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
+import com.amrreda.downloader.ui.components.VideoSheet
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.amrreda.downloader.R
@@ -33,6 +36,16 @@ fun AppRoot(vm: MainViewModel) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     LaunchedEffect(vm.requestedTab) {
         vm.requestedTab?.let { tab = it; vm.requestedTab = null }
+    }
+    // Offer to download a link the user just copied in another app.
+    val context = LocalContext.current
+    val focused = LocalWindowInfo.current.isWindowFocused
+    LaunchedEffect(focused) {
+        if (focused) {
+            val cm = context.getSystemService(android.content.ClipboardManager::class.java)
+            val text = runCatching { cm?.primaryClip?.getItemAt(0)?.coerceToText(context)?.toString() }.getOrNull()
+            vm.onClipboardText(text)
+        }
     }
     val tabs = listOf(
         Tab(R.string.tab_home, Icons.Filled.Download),
@@ -61,5 +74,6 @@ fun AppRoot(vm: MainViewModel) {
             2 -> FilesScreen(vm, m)
             else -> SettingsScreen(vm, m)
         }
+        VideoSheet(vm)
     }
 }
